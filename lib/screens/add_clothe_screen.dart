@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/providers/garderobe_provider.dart';
-import '../providers/auth_provider.dart';
-import '../services/api_service.dart';
-import '../constants/api_constants.dart';
+import '../../providers/auth_provider.dart';
+import '../../services/api_service.dart';
+import '../../constants/api_constants.dart';
 
 class AddClotheScreen extends ConsumerStatefulWidget {
   final String? categoryId;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/garderobe_provider.dart';
-import '../services/api_service.dart';
+import '../../services/api_service.dart';
 
 class AddCategoryDialog extends ConsumerStatefulWidget {
   const AddCategoryDialog({Key? key}) : super(key: key);
