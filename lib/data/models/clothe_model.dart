@@ -1,3 +1,5 @@
+import 'package:yconic/data/models/clothePhoto_model.dart';
+
 class ClotheModel {
   final String id;
   final String brand;
