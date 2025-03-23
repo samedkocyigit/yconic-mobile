@@ -1,3 +1,5 @@
+import 'package:yconic/data/models/clothe_model.dart';
+
 class CategoryModel {
   final String id;
   final String name;
