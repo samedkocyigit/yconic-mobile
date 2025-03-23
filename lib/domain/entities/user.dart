@@ -1,30 +1,39 @@
+import 'package:yconic/domain/entities/garderobe.dart';
+import 'package:yconic/domain/entities/suggestion.dart';
+import 'package:yconic/domain/entities/userPersona.dart';
+
 class User{
-  final String id;
-  final String? name;
-  final String email;
-  final String? surname;
-  final int? age;
-  final double? height;
-  final double? weight;
-  final DateTime? birthday;
-  final Status? isActive;
-  final String? phoneNumber;
-  final String? userPersonaId;
-  final String? userGarderobeId;
-  final Persona? userPersona;
-  final Garderobe? userGarderobe;
-  final List<Suggestions>? suggestions;
+  final String Id;
+  final String Email;
+  final String? Name;
+  final String? Surname;
+  final int? Role;
+  final int? Age;
+  final double? Weight;
+  final double? Height;
+  final DateTime? Birthday;
+  final String? PhoneNumber;
+  final String? UserPersonaId;
+  final String? UserGarderobeId;
+  final Userpersona? UserPersona;
+  final Garderobe? UserGarderobe;
+  final List<Suggestion>? Suggestions;
 
   User({
-    required this.id,
-    required this.email,
-    this.surname,
-    this.birthday,
-    this.age,
-    this.weight,
-    this.height,
-    this.isActive,
-    this.userPersonaId,
-    this.userGarderobeId
+    required this.Id,
+    required this.Email,
+    this.Name,
+    this.Surname,
+    this.Role,
+    this.Age,
+    this.Weight,
+    this.Height,
+    this.Birthday,
+    this.PhoneNumber,
+    this.UserPersonaId,
+    this.UserGarderobeId,
+    this.UserGarderobe,
+    this.UserPersona,
+    this.Suggestions,
   });
 }

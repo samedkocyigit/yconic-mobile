@@ -1,4 +1,6 @@
-import 'package:yconic_mobile/domain/entities/user.dart';
+import 'package:yconic/data/models/garderobe_model.dart';
+import 'package:yconic/data/models/suggestion_model.dart';
+import 'package:yconic/data/models/userPersona_model.dart';
 
 class UserModel {
   final String id;
@@ -12,8 +14,8 @@ class UserModel {
   final String? phoneNumber;
   final String? userPersonaId;
   final String? userGarderobeId;
-  final GarderobeModel? garderobe;
   final PersonaModel? persona;
+  final GarderobeModel? garderobe;
   final List<SuggestionModel>? suggestions;
 
   UserModel({
