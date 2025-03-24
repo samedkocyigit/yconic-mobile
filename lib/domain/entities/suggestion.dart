@@ -5,15 +5,14 @@ class Suggestion {
   final String UserId;
   final String? Description;
   final String? Image;
-  final String CreatedAt;
+  final DateTime? CreatedAt;
   final List<Clothe> SuggestedLook;
 
-  Suggestion({
-    required this.Id,
-    required this.UserId,
-    this.Description,
-    this.Image,
-    required this.CreatedAt,
-    required this.SuggestedLook
-  });
+  Suggestion(
+      {required this.Id,
+      required this.UserId,
+      this.Description,
+      this.Image,
+      required this.CreatedAt,
+      required this.SuggestedLook});
 }
