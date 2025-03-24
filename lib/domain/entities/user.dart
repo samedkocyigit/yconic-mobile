@@ -1,8 +1,8 @@
 import 'package:yconic/domain/entities/garderobe.dart';
 import 'package:yconic/domain/entities/suggestion.dart';
-import 'package:yconic/domain/entities/userPersona.dart';
+import 'package:yconic/domain/entities/Persona.dart';
 
-class User{
+class User {
   final String Id;
   final String Email;
   final String? Name;
@@ -15,7 +15,7 @@ class User{
   final String? PhoneNumber;
   final String? UserPersonaId;
   final String? UserGarderobeId;
-  final Userpersona? UserPersona;
+  final Persona? UserPersona;
   final Garderobe? UserGarderobe;
   final List<Suggestion>? Suggestions;
 
@@ -36,4 +36,24 @@ class User{
     this.UserPersona,
     this.Suggestions,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': Id,
+      'email': Email,
+      'name': Name,
+      'surname': Surname,
+      'role': Role,
+      'age': Age,
+      'weight': Weight,
+      'height': Height,
+      'birthday': Birthday,
+      'phoneNumber': PhoneNumber,
+      'userPersonaId': UserPersonaId,
+      'userPersona': UserPersona,
+      'userGarderobeId': UserGarderobeId,
+      'userGarderobe': UserGarderobe,
+      'suggestions': Suggestions,
+    };
+  }
 }
