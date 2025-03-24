@@ -4,7 +4,7 @@ class GarderobeModel {
   final String id;
   final String name;
   final String userId;
-  final List<CategoryModel> clothesCategory;
+  final List<ClotheCategoryModel> clothesCategory;
 
   GarderobeModel({
     required this.id,
@@ -19,7 +19,7 @@ class GarderobeModel {
       name: json['name'] as String,
       userId: json['userId'] as String,
       clothesCategory: (json['clothesCategory'] as List)
-          .map((e) => CategoryModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => ClotheCategoryModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
   }

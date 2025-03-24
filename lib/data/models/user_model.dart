@@ -1,6 +1,6 @@
 import 'package:yconic/data/models/garderobe_model.dart';
 import 'package:yconic/data/models/suggestion_model.dart';
-import 'package:yconic/data/models/userPersona_model.dart';
+import 'package:yconic/data/models/persona_model.dart';
 
 class UserModel {
   final String id;
@@ -11,6 +11,7 @@ class UserModel {
   final int? age;
   final double? weight;
   final double? height;
+  final DateTime? birthday;
   final String? phoneNumber;
   final String? userPersonaId;
   final String? userGarderobeId;
@@ -27,6 +28,7 @@ class UserModel {
     this.age,
     this.weight,
     this.height,
+    this.birthday,
     this.phoneNumber,
     this.userPersonaId,
     this.userGarderobeId,
@@ -43,9 +45,12 @@ class UserModel {
       surname: json['surname'] as String?,
       role: json['role'] as int?,
       age: json['age'] as int?,
-      weight: json['weight'] != null ? (json['weight'] as num).toDouble() : null,
-      height: json['height'] != null ? (json['height'] as num).toDouble() : null,
+      weight:
+          json['weight'] != null ? (json['weight'] as num).toDouble() : null,
+      height:
+          json['height'] != null ? (json['height'] as num).toDouble() : null,
       phoneNumber: json['phoneNumber'] as String?,
+      birthday: json['birthday'] as DateTime?,
       userPersonaId: json['userPersonaId'] as String?,
       userGarderobeId: json['userGarderobeId'] as String?,
       garderobe: json['garderobe'] != null
@@ -56,8 +61,7 @@ class UserModel {
           : null,
       suggestions: json['suggestions'] != null
           ? (json['suggestions'] as List)
-              .map((e) =>
-                  SuggestionModel.fromJson(e as Map<String, dynamic>))
+              .map((e) => SuggestionModel.fromJson(e as Map<String, dynamic>))
               .toList()
           : null,
     );

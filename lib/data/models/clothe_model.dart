@@ -7,7 +7,7 @@ class ClotheModel {
   final String? description;
   final String mainPhoto;
   final String categoryId;
-  final List<PhotoModel> photos;
+  final List<ClothePhotoModel> photos;
 
   ClotheModel({
     required this.id,
@@ -28,7 +28,7 @@ class ClotheModel {
       mainPhoto: json['mainPhoto'] as String,
       categoryId: json['categoryId'] as String,
       photos: (json['photos'] as List)
-          .map((e) => PhotoModel.fromJson(e as Map<String, dynamic>))
+          .map((e) => ClothePhotoModel.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
   }

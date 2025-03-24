@@ -1,13 +1,13 @@
 import 'package:yconic/data/models/clothe_model.dart';
 
-class CategoryModel {
+class ClotheCategoryModel {
   final String id;
   final String name;
   final int categoryType;
   final String garderobeId;
   final List<ClotheModel> clothes;
 
-  CategoryModel({
+  ClotheCategoryModel({
     required this.id,
     required this.name,
     required this.categoryType,
@@ -15,8 +15,8 @@ class CategoryModel {
     required this.clothes,
   });
 
-  factory CategoryModel.fromJson(Map<String, dynamic> json) {
-    return CategoryModel(
+  factory ClotheCategoryModel.fromJson(Map<String, dynamic> json) {
+    return ClotheCategoryModel(
       id: json['id'] as String,
       name: json['name'] as String,
       categoryType: json['categoryType'] as int,
