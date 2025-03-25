@@ -50,7 +50,9 @@ class UserModel {
       height:
           json['height'] != null ? (json['height'] as num).toDouble() : null,
       phoneNumber: json['phoneNumber'] as String?,
-      birthday: json['birthday'] as DateTime?,
+      birthday: json['birthday'] != null
+          ? DateTime.parse(json['birthday'] as String)
+          : null,
       userPersonaId: json['userPersonaId'] as String?,
       userGarderobeId: json['userGarderobeId'] as String?,
       garderobe: json['garderobe'] != null
