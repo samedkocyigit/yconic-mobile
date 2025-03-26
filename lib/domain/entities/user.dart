@@ -1,6 +1,6 @@
 import 'package:yconic/domain/entities/garderobe.dart';
 import 'package:yconic/domain/entities/suggestion.dart';
-import 'package:yconic/domain/entities/Persona.dart';
+import 'package:yconic/domain/entities/persona.dart';
 
 class User {
   final String Id;
@@ -55,5 +55,10 @@ class User {
       'userGarderobe': UserGarderobe,
       'suggestions': Suggestions,
     };
+  }
+
+  @override
+  String toString() {
+    return 'User(id: $Id, email: $Email, name: $Name, garderobe: $UserGarderobe, garderobeId: $UserGarderobeId)';
   }
 }

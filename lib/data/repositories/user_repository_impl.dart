@@ -43,32 +43,31 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<User> register(
-      String email,
-      String password,
-      String confirmPassword,
-      String name,
-      String surname,
-      DateTime birthday,
-      String phoneNumber) async {
-    final response = await client.post(Uri.parse('$baseUrl/Auth/Register'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-          'confirmPassword': confirmPassword,
-          'name': name,
-          'surname': surname,
-          'birthday': birthday,
-          'phoneNumber': phoneNumber
-        }));
+  Future<void> register(
+    String email,
+    String password,
+    String confirmPassword,
+    String name,
+    String surname,
+    DateTime birthday,
+    String phoneNumber,
+  ) async {
+    final response = await client.post(
+      Uri.parse('$baseUrl/Auth/Register'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+        'confirmPassword': confirmPassword,
+        'name': name,
+        'surname': surname,
+        'birthday': birthday.toIso8601String(),
+        'phoneNumber': phoneNumber,
+      }),
+    );
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      final userModel = UserModel.fromJson(data);
-      return userModel.toEntity();
-    } else {
-      throw Exception('Registeration has been failed:  ${response.statusCode}');
+    if (response.statusCode != 200) {
+      throw Exception('Registeration has been failed: ${response.statusCode}');
     }
   }
 
