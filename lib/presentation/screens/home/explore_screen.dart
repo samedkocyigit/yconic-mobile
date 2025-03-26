@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class AiSuggestionScreen extends StatelessWidget {
-  const AiSuggestionScreen({super.key});
+class ExploreScreen extends StatelessWidget {
+  const ExploreScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Yconic Ai Suggestion'),
+        title: Text('Yconic Explore'),
       ),
       body: Center(
         child: Text(
