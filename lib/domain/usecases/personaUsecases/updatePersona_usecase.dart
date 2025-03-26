@@ -1,5 +1,5 @@
-import 'package:yconic/domain/entities/Persona.dart';
-import 'package:yconic/domain/repositories/Persona_repository.dart';
+import 'package:yconic/domain/entities/persona.dart';
+import 'package:yconic/domain/repositories/persona_repository.dart';
 
 class UpdatePersonaUsecase {
   final PersonaRepository repository;

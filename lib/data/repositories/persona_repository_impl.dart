@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:yconic/data/mappers/persona_model_mapper.dart';
 import 'package:yconic/data/models/persona_model.dart';
-import 'package:yconic/domain/entities/Persona.dart';
-import 'package:yconic/domain/repositories/Persona_repository.dart';
+import 'package:yconic/domain/entities/persona.dart';
+import 'package:yconic/domain/repositories/persona_repository.dart';
 
 class PersonaRepositoryImpl implements PersonaRepository {
   final String baseUrl;

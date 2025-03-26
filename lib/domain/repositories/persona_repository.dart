@@ -1,4 +1,4 @@
-import 'package:yconic/domain/entities/Persona.dart';
+import 'package:yconic/domain/entities/persona.dart';
 
 abstract class PersonaRepository {
   Future<Persona> getPersonaById(String id);
