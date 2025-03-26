@@ -1,4 +1,3 @@
-import 'package:yconic/domain/entities/user.dart';
 import 'package:yconic/domain/repositories/user_repository.dart';
 
 class RegisterUsecase {
@@ -6,7 +5,7 @@ class RegisterUsecase {
 
   RegisterUsecase(this.repository);
 
-  Future<User> execute(
+  Future<void> execute(
       String email,
       String password,
       String confirmPassword,
@@ -14,7 +13,7 @@ class RegisterUsecase {
       String surname,
       DateTime birthday,
       String phoneNumber) async {
-    return await repository.register(
+    await repository.register(
         email, password, confirmPassword, name, surname, birthday, phoneNumber);
   }
 }
