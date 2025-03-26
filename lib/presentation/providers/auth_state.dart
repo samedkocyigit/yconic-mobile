@@ -18,4 +18,8 @@ class AuthState {
       error: error,
     );
   }
+
+  factory AuthState.initial() {
+    return AuthState(isLoading: false, error: null, user: null);
+  }
 }

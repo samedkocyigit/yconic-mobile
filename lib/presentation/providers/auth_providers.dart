@@ -6,5 +6,7 @@ import 'package:yconic/presentation/providers/auth_state.dart';
 final authNotifierProvider =
     StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   final loginUseCase = ref.watch(loginUseCaseProvider);
-  return AuthNotifier(loginUsecase: loginUseCase);
+  final registerUsecase = ref.watch(registerUseCaseProvider);
+  return AuthNotifier(
+      ref: ref, loginUsecase: loginUseCase, registerUsecase: registerUsecase);
 });
