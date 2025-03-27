@@ -32,11 +32,15 @@ class AppTextStyles {
     color: Colors.white,
   );
 
-  static var titleLarge;
+  static const TextStyle titleLarge = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+  );
 
   static TextTheme get textTheme => const TextTheme(
         displayLarge: headline,
-        titleLarge: title,
+        titleLarge: titleLarge,
         bodyLarge: body,
         bodyMedium: body,
         labelLarge: button,
