@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/presentation/providers/auth_providers.dart';
+import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/screens/auth/login_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
