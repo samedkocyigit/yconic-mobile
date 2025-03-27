@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/presentation/providers/clothe_category_provider.dart';
+import 'package:yconic/presentation/providers/clothe_category/clothe_category_provider.dart';
 import 'package:yconic/core/theme/app_colors.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
+import 'package:yconic/presentation/screens/home/garderobe/add_category_popup.dart';
+import 'package:yconic/presentation/screens/home/garderobe/add_clothe_popup.dart';
 
 class GarderobeScreen extends ConsumerStatefulWidget {
   const GarderobeScreen({Key? key}) : super(key: key);
@@ -16,11 +18,11 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final categories = ref.watch(clothesCategoryProvider);
+    final categories = ref.watch(clotheCategoriesProvider);
 
     if (categories.isEmpty) {
       return Scaffold(
-        backgroundColor: AppColors.background,
+        backgroundColor: Colors.white,
         body: Center(
           child: Text(
             "No categories found in your garderobe.",
@@ -33,89 +35,119 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
     final selectedCategory = categories[selectedCategoryIndex];
 
     return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.primary, AppColors.secondary],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SingleChildScrollView(
+      backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
+        onPressed: () {
+          showAddClothePopup(context);
+        },
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "My Garderobe",
+                style: AppTextStyles.headline,
+              ),
+              const SizedBox(height: 12),
+              // Kategori seçim alanı: Kategori butonları
+              SizedBox(
+                height: 42,
+                child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(categories.length, (index) {
-                      final category = categories[index];
-                      final isSelected = (index == selectedCategoryIndex);
-
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: ChoiceChip(
-                          label: Text(
-                            category.Name,
-                            style: AppTextStyles.bodyBold.copyWith(
-                              color: isSelected
-                                  ? Colors.white
-                                  : AppColors.textPrimary,
-                            ),
-                          ),
-                          selected: isSelected,
-                          onSelected: (_) {
-                            setState(() {
-                              selectedCategoryIndex = index;
-                            });
-                          },
-                          selectedColor: AppColors.accent,
-                          backgroundColor: Colors.white54,
+                  itemCount: categories.length + 1,
+                  separatorBuilder: (_, __) => const SizedBox(width: 8),
+                  itemBuilder: (context, index) {
+                    if (index == categories.length) {
+                      return OutlinedButton(
+                        onPressed: () {
+                          showAddCategoryPopup(context);
+                        },
+                        style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
                           ),
+                          side: BorderSide(color: Colors.grey.shade400),
+                          backgroundColor: Colors.white,
+                        ),
+                        child: Text(
+                          "+ Category",
+                          style: AppTextStyles.body,
                         ),
                       );
-                    }),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  selectedCategory.Name,
-                  style: AppTextStyles.titleLarge.copyWith(
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: GridView.builder(
-                    padding: const EdgeInsets.only(top: 8),
-                    itemCount: selectedCategory.Clothes.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
-                      childAspectRatio: 0.7,
-                    ),
-                    itemBuilder: (context, clothIndex) {
-                      final clothe = selectedCategory.Clothes[clothIndex];
-                      final imageUrl =
-                          'http://10.0.2.2:5000${clothe.MainPhoto}';
+                    }
 
-                      return GestureDetector(
+                    final category = categories[index];
+                    final isSelected = selectedCategoryIndex == index;
+
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedCategoryIndex = index;
+                        });
+                      },
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: isSelected ? Colors.black : Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: isSelected
+                                ? Colors.black
+                                : Colors.grey.shade400,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            category.Name,
+                            style: AppTextStyles.bodyBold.copyWith(
+                              color: isSelected ? Colors.white : Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: GridView.builder(
+                  itemCount: selectedCategory.Clothes.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    childAspectRatio: 0.65,
+                  ),
+                  itemBuilder: (context, clothIndex) {
+                    final clothe = selectedCategory.Clothes[clothIndex];
+                    final imageUrl = 'http://10.0.2.2:5000${clothe.MainPhoto}';
+
+                    return Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(16),
                         onTap: () {
                           // TODO: Navigate to clothe detail page
                         },
-                        child: Card(
-                          color: AppColors.inputFill,
-                          elevation: 6,
-                          shadowColor: AppColors.accent.withOpacity(0.3),
-                          shape: RoundedRectangleBorder(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -129,19 +161,18 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
                                     fit: BoxFit.cover,
                                     errorBuilder: (ctx, _, __) => const Icon(
                                       Icons.image_not_supported,
-                                      color: Colors.white70,
+                                      color: Colors.grey,
                                     ),
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              Container(
+                                padding: const EdgeInsets.all(10),
                                 child: Text(
                                   clothe.Name,
+                                  style: AppTextStyles.bodyBold
+                                      .copyWith(color: Colors.black),
                                   textAlign: TextAlign.center,
-                                  style: AppTextStyles.bodyBold.copyWith(
-                                    color: AppColors.textPrimary,
-                                  ),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -149,12 +180,12 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
                             ],
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
