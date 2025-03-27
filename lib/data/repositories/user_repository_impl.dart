@@ -77,7 +77,8 @@ class UserRepositoryImpl implements UserRepository {
         headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final userModel = UserModel.fromJson(data);
+      final userJson = data['data'];
+      final userModel = UserModel.fromJson(userJson);
       return userModel.toEntity();
     } else {
       throw Exception('There is no user with that Id: ${response.statusCode}');
