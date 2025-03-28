@@ -3,8 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/presentation/providers/clothe_category/clothe_category_provider.dart';
 import 'package:yconic/core/theme/app_colors.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
+import 'package:yconic/presentation/screens/home/clothe_detail_screen.dart';
 import 'package:yconic/presentation/screens/home/garderobe/add_category_popup.dart';
 import 'package:yconic/presentation/screens/home/garderobe/add_clothe_popup.dart';
+import 'package:yconic/presentation/screens/home/garderobe/edit_category_popup.dart';
+import 'package:yconic/domain/entities/clotheCategory.dart';
+import 'package:yconic/presentation/providers/auth/auth_provider.dart';
+import 'package:yconic/presentation/providers/user/user_provider.dart';
 
 class GarderobeScreen extends ConsumerStatefulWidget {
   const GarderobeScreen({Key? key}) : super(key: key);
@@ -15,6 +20,87 @@ class GarderobeScreen extends ConsumerStatefulWidget {
 
 class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
   int selectedCategoryIndex = 0;
+
+  void _showCategoryOptionsDialog(
+      BuildContext context, ClotheCategory category) {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.edit),
+            title: const Text('Edit'),
+            onTap: () {
+              Navigator.pop(context);
+              showEditCategoryPopup(context, category);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.delete),
+            title: const Text('Delete'),
+            onTap: () async {
+              Navigator.pop(context);
+              final confirm = await showDialog<bool>(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  backgroundColor: Colors.white,
+                  title: const Text("Delete Category"),
+                  content: Text(
+                      "Are you sure you want to delete '${category.Name}'?"),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(ctx, false),
+                      child: const Text("Cancel"),
+                    ),
+                    ElevatedButton(
+                      style:
+                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                      onPressed: () => Navigator.pop(ctx, true),
+                      child: const Text("Delete",
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ],
+                ),
+              );
+
+              if (confirm == true) {
+                try {
+                  await ref
+                      .read(clotheCategoryNotifierProvider.notifier)
+                      .deleteClotheCategory(category.Id);
+
+                  final userId = ref.read(userProvider)?.Id;
+                  if (userId != null) {
+                    await ref
+                        .read(authNotifierProvider.notifier)
+                        .getUser(userId);
+                    final updatedUser = ref.read(authNotifierProvider).user;
+                    ref.read(userProvider.notifier).state = updatedUser;
+                  }
+
+                  if (selectedCategoryIndex >=
+                      ref.read(clotheCategoriesProvider).length) {
+                    setState(() {
+                      selectedCategoryIndex = 0;
+                    });
+                  }
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(e.toString())),
+                  );
+                }
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +125,8 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.black,
         onPressed: () {
-          showAddClothePopup(context);
+          final selectedCategory = categories[selectedCategoryIndex];
+          showAddClothePopup(context, selectedCategory);
         },
         child: const Icon(Icons.add, color: Colors.white),
       ),
@@ -54,7 +141,6 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
                 style: AppTextStyles.headline,
               ),
               const SizedBox(height: 12),
-              // Kategori seçim alanı: Kategori butonları
               SizedBox(
                 height: 42,
                 child: ListView.separated(
@@ -89,6 +175,9 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
                         setState(() {
                           selectedCategoryIndex = index;
                         });
+                      },
+                      onLongPress: () {
+                        _showCategoryOptionsDialog(context, category);
                       },
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
@@ -135,7 +224,13 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
                       child: InkWell(
                         borderRadius: BorderRadius.circular(16),
                         onTap: () {
-                          // TODO: Navigate to clothe detail page
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  ClotheDetailScreen(clothe: clothe),
+                            ),
+                          );
                         },
                         child: Container(
                           decoration: BoxDecoration(
