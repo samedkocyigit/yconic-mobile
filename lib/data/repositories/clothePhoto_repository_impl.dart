@@ -1,6 +1,7 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
 
 import 'package:http/http.dart' as http;
+import 'package:yconic/data/dtos/create_clothe_photos.dto.dart';
 import 'package:yconic/data/mappers/clothePhoto_model_mapper.dart';
 import 'package:yconic/data/models/clothePhoto_model.dart'
     show ClothePhotoModel;
@@ -15,41 +16,32 @@ class ClothePhotoRepositoryImpl implements ClothePhotoRepository {
       : client = client ?? http.Client();
 
   @override
-  Future<ClothePhoto> getClothePhotoById(String id) async {
-    final response = await client.get(
-      Uri.parse('$baseUrl/clothePhoto/$id'),
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      final clothePhotoModel = ClothePhotoModel.fromJson(data);
-      return clothePhotoModel.toEntity();
-    } else {
-      throw Exception(
-          'Fetching operation has been failed: ${response.statusCode}');
-    }
-  }
-
   @override
-  Future<ClothePhoto> updateClothePhoto(ClothePhoto clothePhoto) async {
-    final response = await client.put(Uri.parse('$baseUrl/clothePhoto'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(clothePhoto.toJson()));
+  Future<List<ClothePhoto>> createClothePhoto(CreateClothePhotoDto dto) async {
+    final uri = Uri.parse('$baseUrl/ClothePhoto/${dto.clotheId}');
+    final request = http.MultipartRequest('POST', uri);
+
+    request.fields['clotheId'] = dto.clotheId;
+
+    for (var file in dto.photoFiles) {
+      request.files.add(await http.MultipartFile.fromPath('photos', file.path));
+    }
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      final clothePhotoModel = ClothePhotoModel.fromJson(data);
-      return clothePhotoModel.toEntity();
+      final List<dynamic> data = jsonDecode(response.body);
+      return data.map((e) => ClothePhotoModel.fromJson(e).toEntity()).toList();
     } else {
-      throw Exception('Update process has been failed: ${response.statusCode}');
+      throw Exception('Photo upload failed: ${response.statusCode}');
     }
   }
 
   @override
   Future deleteClothePhotoWithId(String id) async {
     final response = await client.delete(
-      Uri.parse('$baseUrl/clothePhoto/$id'),
+      Uri.parse('$baseUrl/ClothePhoto/$id'),
       headers: {'Content-Type': 'application/json'},
     );
 
