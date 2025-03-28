@@ -1,6 +1,7 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
 
 import 'package:http/http.dart' as http;
+import 'package:yconic/data/dtos/create_clothe_dto.dart';
 import 'package:yconic/data/mappers/clothe_model_mapper.dart';
 import 'package:yconic/data/models/clothe_model.dart' show ClotheModel;
 import 'package:yconic/domain/entities/clothe.dart' show Clothe;
@@ -46,15 +47,24 @@ class ClotheRepositoryImpl implements ClotheRepository {
   }
 
   @override
-  Future createClothe(Clothe clothe) async {
-    final response = await client.post(Uri.parse('$baseUrl/clothe'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(clothe.toJson()));
+  Future<void> createClothe(CreateClotheDto clothe) async {
+    final uri = Uri.parse('$baseUrl/clothe');
 
-    if (response.statusCode == 200) {
-    } else {
+    final request = http.MultipartRequest('POST', uri)
+      ..fields.addAll(clothe.toFields());
+
+    for (final photo in clothe.photoFiles) {
+      final multipartFile =
+          await http.MultipartFile.fromPath('Photos', photo.path);
+      request.files.add(multipartFile);
+    }
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode != 200) {
       throw Exception(
-          'Creation process has been failed: ${response.statusCode}');
+          'Creation failed: ${response.statusCode} - ${response.body}');
     }
   }
 
