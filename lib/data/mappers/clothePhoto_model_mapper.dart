@@ -3,6 +3,6 @@ import 'package:yconic/domain/entities/clothePhoto.dart';
 
 extension ClothephotoModelMapper on ClothePhotoModel {
   ClothePhoto toEntity() {
-    return ClothePhoto(Id: id, Url: id, ClotheId: clotheId);
+    return ClothePhoto(Id: id, Url: url, ClotheId: clotheId);
   }
 }
