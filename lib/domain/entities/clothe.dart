@@ -7,7 +7,7 @@ class Clothe {
   final String? Description;
   final String MainPhoto;
   final String CategoryId;
-  final List<ClothePhoto> ClothePhotos;
+  final List<ClothePhoto>? ClothePhotos;
 
   Clothe(
       {required this.Id,
@@ -15,7 +15,7 @@ class Clothe {
       required this.Name,
       required this.MainPhoto,
       required this.CategoryId,
-      required this.ClothePhotos,
+      this.ClothePhotos,
       this.Description});
 
   Map<String, dynamic> toJson() {
@@ -26,7 +26,27 @@ class Clothe {
       'description': Description,
       'mainPhoto': MainPhoto,
       'categoryId': CategoryId,
-      'clothePhotos': ClothePhotos,
+      'photos': ClothePhotos,
     };
+  }
+
+  Clothe copyWith({
+    String? Id,
+    String? Brand,
+    String? Name,
+    String? Description,
+    String? MainPhoto,
+    String? CategoryId,
+    List<ClothePhoto>? ClothePhotos,
+  }) {
+    return Clothe(
+      Id: Id ?? this.Id,
+      Brand: Brand ?? this.Brand,
+      Name: Name ?? this.Name,
+      Description: Description ?? this.Description,
+      MainPhoto: MainPhoto ?? this.MainPhoto,
+      CategoryId: CategoryId ?? this.CategoryId,
+      ClothePhotos: ClothePhotos ?? this.ClothePhotos,
+    );
   }
 }
