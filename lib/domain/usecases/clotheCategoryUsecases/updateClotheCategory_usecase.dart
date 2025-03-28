@@ -1,3 +1,4 @@
+import 'package:yconic/data/dtos/update_clothe_category_dto.dart';
 import 'package:yconic/domain/entities/clotheCategory.dart';
 import 'package:yconic/domain/repositories/clotheCategory_repository.dart';
 
@@ -6,7 +7,7 @@ class UpdateClotheCategoryUsecase {
 
   UpdateClotheCategoryUsecase(this.repository);
 
-  Future<ClotheCategory> execute(ClotheCategory clothePhoto) async {
+  Future<ClotheCategory> execute(UpdateClotheCategoryDto clothePhoto) async {
     return await repository.updateClotheCategory(clothePhoto);
   }
 }
