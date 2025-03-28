@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yconic/data/dtos/create_clothe_dto.dart';
 import 'package:yconic/domain/entities/clothe.dart';
 import 'package:yconic/domain/usecases/clotheUsecases/createClothe_usecase.dart';
 import 'package:yconic/domain/usecases/clotheUsecases/deleteClotheWithId_usecase.dart';
@@ -13,15 +14,15 @@ class ClotheNotifier extends StateNotifier<ClotheState> {
   final DeleteClotheWithIdUsecase deleteClotheWithIdUsecase;
   final GetClotheByIdUsecase getClotheByIdUsecase;
 
-  ClotheNotifier(
-      {required this.ref,
-      required this.createClotheUsecase,
-      required this.updateClotheUsecase,
-      required this.deleteClotheWithIdUsecase,
-      required this.getClotheByIdUsecase})
-      : super(ClotheState());
+  ClotheNotifier({
+    required this.ref,
+    required this.createClotheUsecase,
+    required this.updateClotheUsecase,
+    required this.deleteClotheWithIdUsecase,
+    required this.getClotheByIdUsecase,
+  }) : super(ClotheState());
 
-  Future<void> createClothe(Clothe clothe) async {
+  Future<void> createClothe(CreateClotheDto clothe) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final newClothe = await createClotheUsecase.execute(clothe);
@@ -51,13 +52,15 @@ class ClotheNotifier extends StateNotifier<ClotheState> {
     }
   }
 
-  Future<void> getClothe(String id) async {
+  Future<Clothe> getClothe(String id) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final fetchedClothe = await getClotheByIdUsecase.execute(id);
       state = state.copyWith(isLoading: false, clothe: fetchedClothe);
+      return fetchedClothe;
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
     }
   }
 }
