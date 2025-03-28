@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/data/repositories/clotheCategory_repository_impl.dart';
+import 'package:yconic/data/repositories/clothePhoto_repository_impl.dart';
 import 'package:yconic/data/repositories/clothe_repository_impl.dart';
 import 'package:yconic/data/repositories/garderobe_repository_impl.dart';
 import 'package:yconic/data/repositories/user_repository_impl.dart';
 import 'package:yconic/domain/repositories/clotheCategory_repository.dart';
+import 'package:yconic/domain/repositories/clothePhoto_repository.dart';
 import 'package:yconic/domain/repositories/clothe_repository.dart';
 import 'package:yconic/domain/repositories/garderobe_repository.dart';
 import 'package:yconic/domain/repositories/user_repository.dart';
@@ -11,6 +13,8 @@ import 'package:yconic/domain/usecases/clotheCategoryUsecases/createClotheCatego
 import 'package:yconic/domain/usecases/clotheCategoryUsecases/deleteClotheCategoryWithId_usecase.dart';
 import 'package:yconic/domain/usecases/clotheCategoryUsecases/getClotheCategoryById_usecase.dart';
 import 'package:yconic/domain/usecases/clotheCategoryUsecases/updateClotheCategory_usecase.dart';
+import 'package:yconic/domain/usecases/clothePhotoUsecases/createClothePhoto_usecase.dart';
+import 'package:yconic/domain/usecases/clothePhotoUsecases/deleteClothePhotoWithId_usecase.dart';
 import 'package:yconic/domain/usecases/clotheUsecases/createClothe_usecase.dart';
 import 'package:yconic/domain/usecases/clotheUsecases/deleteClotheWithId_usecase.dart';
 import 'package:yconic/domain/usecases/clotheUsecases/getClotheById_usecase.dart';
@@ -133,4 +137,24 @@ final deleteClotheWithIdUseCaseProvider =
 final getClotheByIdUseCaseProvider = Provider<GetClotheByIdUsecase>((ref) {
   final repository = ref.watch(clotheRepositoryProvider);
   return GetClotheByIdUsecase(repository);
+});
+
+/*--------------------------------------
+                 Clothe-Photo
+----------------------------------------*/
+
+final clothePhotoRepositoryProvider = Provider<ClothePhotoRepository>((ref) {
+  return ClothePhotoRepositoryImpl(baseUrl: baseUrl);
+});
+
+final createClothePhotoUseCaseProvider =
+    Provider<CreateClothePhotoUsecase>((ref) {
+  final repository = ref.watch(clothePhotoRepositoryProvider);
+  return CreateClothePhotoUsecase(repository);
+});
+
+final deleteClothePhotoWithIdUseCaseProvider =
+    Provider<DeleteClothePhotoWithIdUsecase>((ref) {
+  final repository = ref.watch(clothePhotoRepositoryProvider);
+  return DeleteClothePhotoWithIdUsecase(repository);
 });
