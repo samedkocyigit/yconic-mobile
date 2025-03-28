@@ -1,13 +1,11 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as ref;
 import 'package:yconic/core/services/token_service.dart';
 import 'package:yconic/data/mappers/user_model_mapper.dart';
 import 'package:yconic/data/models/user_model.dart';
 import 'package:yconic/domain/entities/user.dart';
 import 'package:yconic/domain/repositories/user_repository.dart';
 import 'package:http/http.dart' as http;
-import 'package:yconic/presentation/providers/token_provider.dart';
 
 class UserRepositoryImpl implements UserRepository {
   final String baseUrl;
