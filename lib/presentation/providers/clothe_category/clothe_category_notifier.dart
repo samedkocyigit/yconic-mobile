@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/data/dtos/create_clothe_category_dto.dart';
-import 'package:yconic/domain/entities/clotheCategory.dart';
+import 'package:yconic/data/dtos/update_clothe_category_dto.dart';
 import 'package:yconic/domain/usecases/clotheCategoryUsecases/createClotheCategory_usecase.dart';
 import 'package:yconic/domain/usecases/clotheCategoryUsecases/deleteClotheCategoryWithId_usecase.dart';
 import 'package:yconic/domain/usecases/clotheCategoryUsecases/getClotheCategoryById_usecase.dart';
@@ -33,7 +33,7 @@ class ClotheCategoryNotifier extends StateNotifier<ClotheCategoryState> {
     }
   }
 
-  Future<void> updateClotheCategory(ClotheCategory category) async {
+  Future<void> updateClotheCategory(UpdateClotheCategoryDto category) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final updatedCategory =
