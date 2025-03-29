@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/presentation/providers/token_provider.dart';
 import 'package:yconic/presentation/screens/auth/login_screen.dart';
-import 'package:yconic/presentation/screens/auth/register_screen.dart';
 import 'package:yconic/presentation/screens/home/home_screen.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {

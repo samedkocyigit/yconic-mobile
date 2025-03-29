@@ -1,4 +1,4 @@
-import 'package:yconic/data/dtos/update_clothe_category_dto.dart';
+import 'package:yconic/data/dtos/clothe_category/update_clothe_category_dto.dart';
 import 'package:yconic/domain/entities/clotheCategory.dart';
 import 'package:yconic/domain/repositories/clotheCategory_repository.dart';
 

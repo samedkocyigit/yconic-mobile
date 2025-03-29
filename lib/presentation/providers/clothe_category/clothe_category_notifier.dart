@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/data/dtos/create_clothe_category_dto.dart';
-import 'package:yconic/data/dtos/update_clothe_category_dto.dart';
+import 'package:yconic/data/dtos/clothe_category/create_clothe_category_dto.dart';
+import 'package:yconic/data/dtos/clothe_category/update_clothe_category_dto.dart';
 import 'package:yconic/domain/usecases/clotheCategoryUsecases/createClotheCategory_usecase.dart';
 import 'package:yconic/domain/usecases/clotheCategoryUsecases/deleteClotheCategoryWithId_usecase.dart';
 import 'package:yconic/domain/usecases/clotheCategoryUsecases/getClotheCategoryById_usecase.dart';

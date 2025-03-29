@@ -4,7 +4,7 @@ import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/screens/auth/login_screen.dart';
 
 class RegisterScreen extends ConsumerWidget {
-  RegisterScreen({Key? key}) : super(key: key);
+  RegisterScreen({super.key});
 
   final emailController = TextEditingController();
   final passwordConfirmController = TextEditingController();

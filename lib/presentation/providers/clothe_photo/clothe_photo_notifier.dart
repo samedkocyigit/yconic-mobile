@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/data/dtos/create_clothe_photos.dto.dart';
+import 'package:yconic/data/dtos/clothe_photos/create_clothe_photos.dto.dart';
 import 'package:yconic/domain/usecases/clothePhotoUsecases/createClothePhoto_usecase.dart';
 import 'package:yconic/domain/usecases/clothePhotoUsecases/deleteClothePhotoWithId_usecase.dart';
 import 'package:yconic/presentation/providers/clothe_photo/clothe_photo_state.dart';

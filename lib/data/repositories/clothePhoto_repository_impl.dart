@@ -1,7 +1,7 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
 
 import 'package:http/http.dart' as http;
-import 'package:yconic/data/dtos/create_clothe_photos.dto.dart';
+import 'package:yconic/data/dtos/clothe_photos/create_clothe_photos.dto.dart';
 import 'package:yconic/data/mappers/clothePhoto_model_mapper.dart';
 import 'package:yconic/data/models/clothePhoto_model.dart'
     show ClothePhotoModel;

@@ -1,5 +1,4 @@
-import 'package:yconic/data/dtos/create_clothe_dto.dart';
-import 'package:yconic/domain/entities/clothe.dart';
+import 'package:yconic/data/dtos/clothe/create_clothe_dto.dart';
 import 'package:yconic/domain/repositories/clothe_repository.dart';
 
 class CreateClotheUsecase {

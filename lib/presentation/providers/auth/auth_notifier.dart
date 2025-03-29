@@ -59,13 +59,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       final fetchedUser = await getUserByIdUsecase.execute(id);
 
-      if (fetchedUser == null) {
-        throw Exception("Kullanıcı bulunamadı");
-      }
-
       print("✅ Backend'den gelen user ID: ${fetchedUser.Id}");
       print(
-          "✅ Category count: ${fetchedUser.UserGarderobe?.ClothesCategories?.length}");
+          "✅ Category count: ${fetchedUser.UserGarderobe?.ClothesCategories.length}");
 
       state = state.copyWith(isLoading: false, user: fetchedUser);
     } catch (e) {
