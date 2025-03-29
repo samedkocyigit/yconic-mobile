@@ -4,7 +4,7 @@ import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/screens/auth/login_screen.dart';
 
 class ProfileScreen extends ConsumerWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

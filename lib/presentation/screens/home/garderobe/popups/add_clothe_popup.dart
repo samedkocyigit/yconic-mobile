@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
-import 'package:yconic/data/dtos/create_clothe_dto.dart';
+import 'package:yconic/data/dtos/clothe/create_clothe_dto.dart';
 import 'package:yconic/domain/entities/clotheCategory.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/providers/clothe/clothe_provider.dart';
-import 'package:yconic/presentation/providers/clothe_category/clothe_category_provider.dart';
 import 'package:yconic/presentation/providers/user/user_provider.dart';
 
 class AddClothePopup extends ConsumerStatefulWidget {

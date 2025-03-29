@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
-import 'package:yconic/data/dtos/create_clothe_photos.dto.dart';
+import 'package:yconic/data/dtos/clothe_photos/create_clothe_photos.dto.dart';
 import 'package:yconic/presentation/providers/clothe_photo/clothe_photo_provider.dart';
 
 Future<bool?> showAddClothePhotoPopup(BuildContext context, String clotheId) {

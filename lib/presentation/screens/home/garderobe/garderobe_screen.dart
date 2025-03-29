@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yconic/domain/entities/clothe.dart';
+import 'package:yconic/presentation/providers/clothe/clothe_provider.dart';
 import 'package:yconic/presentation/providers/clothe_category/clothe_category_provider.dart';
 import 'package:yconic/core/theme/app_colors.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
-import 'package:yconic/presentation/screens/home/clothe_detail_screen.dart';
-import 'package:yconic/presentation/screens/home/garderobe/add_category_popup.dart';
-import 'package:yconic/presentation/screens/home/garderobe/add_clothe_popup.dart';
-import 'package:yconic/presentation/screens/home/garderobe/edit_category_popup.dart';
+import 'package:yconic/presentation/screens/home/garderobe/popups/add_category_popup.dart';
+import 'package:yconic/presentation/screens/home/garderobe/popups/add_clothe_popup.dart';
+import 'package:yconic/presentation/screens/home/garderobe/clothe_detail/clothe_detail_screen.dart';
+import 'package:yconic/presentation/screens/home/garderobe/popups/edit_category_popup.dart';
 import 'package:yconic/domain/entities/clotheCategory.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/providers/user/user_provider.dart';
+import 'package:yconic/presentation/screens/home/garderobe/popups/edit_clothe_popup.dart';
 
 class GarderobeScreen extends ConsumerStatefulWidget {
-  const GarderobeScreen({Key? key}) : super(key: key);
+  const GarderobeScreen({super.key});
 
   @override
   ConsumerState<GarderobeScreen> createState() => _GarderobeScreenState();
@@ -102,6 +105,90 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
     );
   }
 
+  void _showClotheOptionsPopup(Clothe clothe) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.edit),
+              title: const Text("Edit"),
+              onTap: () async {
+                Navigator.pop(context);
+
+                final result = await showEditClothePopup(context, ref, clothe);
+
+                if (result == true) {
+                  final updated = await ref
+                      .read(clotheNotifierProvider.notifier)
+                      .getClothe(clothe.Id);
+
+                  final garderobe = ref.read(userProvider)?.UserGarderobe;
+                  final category = garderobe?.ClothesCategories
+                      .firstWhere((c) => c.Id == clothe.CategoryId);
+
+                  if (category != null) {
+                    final index =
+                        category.Clothes.indexWhere((c) => c.Id == updated.Id);
+                    if (index != -1) {
+                      category.Clothes[index] = updated;
+                      ref.read(userProvider.notifier).state =
+                          ref.read(authNotifierProvider).user;
+                    }
+                  }
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text('Delete'),
+              onTap: () async {
+                Navigator.pop(context);
+
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text("Delete Clothing"),
+                    content: const Text(
+                        "Are you sure you want to delete this clothing item?"),
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.pop(ctx, false),
+                          child: const Text("Cancel")),
+                      TextButton(
+                          onPressed: () => Navigator.pop(ctx, true),
+                          child: const Text("Delete")),
+                    ],
+                  ),
+                );
+
+                if (confirm == true) {
+                  await ref
+                      .read(clotheNotifierProvider.notifier)
+                      .deleteClothe(clothe.Id);
+
+                  final userId = ref.read(userProvider)?.Id;
+                  if (userId != null) {
+                    await ref
+                        .read(authNotifierProvider.notifier)
+                        .getUser(userId);
+                    final updatedUser = ref.read(authNotifierProvider).user;
+                    ref.read(userProvider.notifier).state = updatedUser;
+                  }
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final categories = ref.watch(clotheCategoriesProvider);
@@ -123,6 +210,7 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         backgroundColor: Colors.black,
         onPressed: () {
           final selectedCategory = categories[selectedCategoryIndex];
@@ -223,14 +311,42 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(16),
-                        onTap: () {
-                          Navigator.push(
+                        onTap: () async {
+                          final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) =>
                                   ClotheDetailScreen(clothe: clothe),
                             ),
                           );
+
+                          if (result is Map && result['deleted'] == true) {
+                            final userId = ref.read(userProvider)?.Id;
+                            if (userId != null) {
+                              await ref
+                                  .read(authNotifierProvider.notifier)
+                                  .getUser(userId);
+                              final updatedUser =
+                                  ref.read(authNotifierProvider).user;
+                              ref.read(userProvider.notifier).state =
+                                  updatedUser;
+                            }
+
+                            final categoryId = result['categoryId'];
+                            final categories =
+                                ref.read(clotheCategoriesProvider);
+                            final categoryIndex = categories
+                                .indexWhere((c) => c.Id == categoryId);
+
+                            if (categoryIndex != -1) {
+                              setState(() {
+                                selectedCategoryIndex = categoryIndex;
+                              });
+                            }
+                          }
+                        },
+                        onLongPress: () {
+                          _showClotheOptionsPopup(clothe);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -262,6 +378,8 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
                                 ),
                               ),
                               Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.06,
                                 padding: const EdgeInsets.all(10),
                                 child: Text(
                                   clothe.Name,

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:yconic/presentation/screens/home/ai_suggestion_screen.dart';
-import 'package:yconic/presentation/screens/home/explore_screen.dart';
-import 'package:yconic/presentation/screens/home/garderobe_screen.dart';
-import 'package:yconic/presentation/screens/home/home_tab_screen.dart';
-import 'package:yconic/presentation/screens/home/profile_screen.dart';
+import 'package:yconic/presentation/screens/home/ai/ai_suggestion_screen.dart';
+import 'package:yconic/presentation/screens/home/explore/explore_screen.dart';
+import 'package:yconic/presentation/screens/home/garderobe/garderobe_screen.dart';
+import 'package:yconic/presentation/screens/home/home_tab/home_tab_screen.dart';
+import 'package:yconic/presentation/screens/home/profile/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();

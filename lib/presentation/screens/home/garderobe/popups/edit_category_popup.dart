@@ -6,7 +6,7 @@ import 'package:yconic/domain/entities/clotheCategory.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/providers/clothe_category/clothe_category_provider.dart';
 import 'package:yconic/presentation/providers/user/user_provider.dart';
-import 'package:yconic/data/dtos/update_clothe_category_dto.dart';
+import 'package:yconic/data/dtos/clothe_category/update_clothe_category_dto.dart';
 
 class EditCategoryPopup extends ConsumerStatefulWidget {
   final ClotheCategory category;

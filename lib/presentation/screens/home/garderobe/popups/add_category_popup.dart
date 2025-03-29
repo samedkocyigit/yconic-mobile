@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
-import 'package:yconic/data/dtos/create_clothe_category_dto.dart';
+import 'package:yconic/data/dtos/clothe_category/create_clothe_category_dto.dart';
 import 'package:yconic/data/enums/category_types.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/providers/clothe_category/clothe_category_provider.dart';
 import 'package:yconic/presentation/providers/user/user_provider.dart';
 
 class AddCategoryPopup extends ConsumerStatefulWidget {
-  const AddCategoryPopup({Key? key}) : super(key: key);
+  const AddCategoryPopup({super.key});
 
   @override
   ConsumerState<AddCategoryPopup> createState() => _AddCategoryPopupState();
@@ -116,7 +116,7 @@ class _AddCategoryPopupState extends ConsumerState<AddCategoryPopup> {
 
                         final newUser = ref.read(authNotifierProvider).user;
                         print(
-                            "Backend'den gelen category count: ${newUser?.UserGarderobe?.ClothesCategories?.length}");
+                            "Backend'den gelen category count: ${newUser?.UserGarderobe?.ClothesCategories.length}");
 
                         ref.read(userProvider.notifier).state = newUser;
                       }
