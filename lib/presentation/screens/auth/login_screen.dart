@@ -57,7 +57,9 @@ class LoginScreen extends ConsumerWidget {
                             emailController.text.trim(),
                             passwordController.text.trim(),
                           );
-                          if (authState.user != null) {
+                          final updatedAuthState =
+                              ref.read(authNotifierProvider);
+                          if (updatedAuthState.user != null) {
                             Navigator.pushReplacementNamed(context, '/home');
                           }
                         },
