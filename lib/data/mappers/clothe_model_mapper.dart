@@ -10,6 +10,7 @@ extension ClotheModelMapper on ClotheModel {
         Name: name,
         MainPhoto: mainPhoto,
         CategoryId: categoryId,
+        Description: description,
         ClothePhotos: photos.map((s) => s.toEntity()).toList());
   }
 }
