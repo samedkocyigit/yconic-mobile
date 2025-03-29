@@ -1,4 +1,4 @@
-import 'package:yconic/domain/entities/clothe.dart';
+import 'package:yconic/data/dtos/clothe/patch_clothe_request_dto.dart';
 import 'package:yconic/domain/repositories/clothe_repository.dart';
 
 class UpdateClotheUsecase {
@@ -6,7 +6,7 @@ class UpdateClotheUsecase {
 
   UpdateClotheUsecase(this.repository);
 
-  Future execute(Clothe clothe) async {
-    await repository.updateClothe(clothe);
+  Future execute(String id, PatchClotheRequestDto clotheDto) async {
+    await repository.updateClothe(id, clotheDto);
   }
 }

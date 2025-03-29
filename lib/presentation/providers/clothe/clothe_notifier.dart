@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/data/dtos/create_clothe_dto.dart';
+import 'package:yconic/data/dtos/clothe/create_clothe_dto.dart';
+import 'package:yconic/data/dtos/clothe/patch_clothe_request_dto.dart';
 import 'package:yconic/domain/entities/clothe.dart';
 import 'package:yconic/domain/usecases/clotheUsecases/createClothe_usecase.dart';
 import 'package:yconic/domain/usecases/clotheUsecases/deleteClotheWithId_usecase.dart';
@@ -32,10 +33,10 @@ class ClotheNotifier extends StateNotifier<ClotheState> {
     }
   }
 
-  Future<void> updateClothe(Clothe clothe) async {
+  Future<void> updateClothe(String id, PatchClotheRequestDto clotheDto) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final updatedClothe = await updateClotheUsecase.execute(clothe);
+      final updatedClothe = await updateClotheUsecase.execute(id, clotheDto);
       state = state.copyWith(isLoading: false, clothe: updatedClothe);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());

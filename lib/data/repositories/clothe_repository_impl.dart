@@ -1,7 +1,8 @@
 import 'dart:convert' show jsonDecode, jsonEncode;
 
 import 'package:http/http.dart' as http;
-import 'package:yconic/data/dtos/create_clothe_dto.dart';
+import 'package:yconic/data/dtos/clothe/create_clothe_dto.dart';
+import 'package:yconic/data/dtos/clothe/patch_clothe_request_dto.dart';
 import 'package:yconic/data/mappers/clothe_model_mapper.dart';
 import 'package:yconic/data/models/clothe_model.dart' show ClotheModel;
 import 'package:yconic/domain/entities/clothe.dart' show Clothe;
@@ -32,8 +33,8 @@ class ClotheRepositoryImpl implements ClotheRepository {
   }
 
   @override
-  Future<Clothe> updateClothe(Clothe clothe) async {
-    final response = await client.put(Uri.parse('$baseUrl/clothe'),
+  Future<Clothe> updateClothe(String id, PatchClotheRequestDto clothe) async {
+    final response = await client.patch(Uri.parse('$baseUrl/Clothe/$id'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(clothe.toJson()));
 
@@ -48,7 +49,7 @@ class ClotheRepositoryImpl implements ClotheRepository {
 
   @override
   Future<void> createClothe(CreateClotheDto clothe) async {
-    final uri = Uri.parse('$baseUrl/clothe');
+    final uri = Uri.parse('$baseUrl/Clothe');
 
     final request = http.MultipartRequest('POST', uri)
       ..fields.addAll(clothe.toFields());
