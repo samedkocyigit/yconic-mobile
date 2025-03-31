@@ -9,6 +9,7 @@ extension UserModelMapper on UserModel {
     return User(
       Id: id,
       Email: email,
+      Username: username,
       Name: name,
       Surname: surname,
       Role: role,

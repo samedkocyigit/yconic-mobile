@@ -5,6 +5,7 @@ import 'package:yconic/data/models/persona_model.dart';
 class UserModel {
   final String id;
   final String email;
+  final String username;
   final String? name;
   final String? surname;
   final int? role;
@@ -22,6 +23,7 @@ class UserModel {
   UserModel({
     required this.id,
     required this.email,
+    required this.username,
     this.name,
     this.surname,
     this.role,
@@ -41,19 +43,23 @@ class UserModel {
     return UserModel(
       id: json['id'] as String,
       email: json['email'] as String,
-      name: json['name'] as String?,
-      surname: json['surname'] as String?,
+      username: json['username'] as String,
+      name: json['name'] != null ? (json['name'] as String) : null,
+      surname: json['surname'] != null ? (json['surname'] as String) : null,
       role: json['role'] as int?,
       age: json['age'] as int?,
       weight:
           json['weight'] != null ? (json['weight'] as num).toDouble() : null,
       height:
           json['height'] != null ? (json['height'] as num).toDouble() : null,
-      phoneNumber: json['phoneNumber'] as String?,
+      phoneNumber:
+          json['phoneNumber'] != null ? (json['phoneNumber'] as String) : null,
       birthday: json['birthday'] != null
           ? DateTime.parse(json['birthday'] as String)
           : null,
-      userPersonaId: json['userPersonaId'] as String?,
+      userPersonaId: json['userPersonaId'] != null
+          ? (json['userPersonaId'] as String)
+          : null,
       userGarderobeId: json['userGarderobeId'] as String?,
       garderobe: json['garderobe'] != null
           ? GarderobeModel.fromJson(json['garderobe'] as Map<String, dynamic>)

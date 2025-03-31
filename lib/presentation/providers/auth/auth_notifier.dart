@@ -31,17 +31,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> register(
     String email,
+    String username,
     String password,
-    String confirmPassword,
-    String name,
-    String surname,
-    DateTime birthday,
-    String phoneNumber,
   ) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      await registerUsecase.execute(email, password, confirmPassword, name,
-          surname, birthday, phoneNumber);
+      await registerUsecase.execute(email, username, password);
       state = state.copyWith(isLoading: false, user: null);
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -58,11 +53,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(isLoading: true, error: null);
     try {
       final fetchedUser = await getUserByIdUsecase.execute(id);
-
-      print("✅ Backend'den gelen user ID: ${fetchedUser.Id}");
-      print(
-          "✅ Category count: ${fetchedUser.UserGarderobe?.ClothesCategories.length}");
-
       state = state.copyWith(isLoading: false, user: fetchedUser);
     } catch (e) {
       print("🔥 getUser error: $e");

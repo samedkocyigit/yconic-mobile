@@ -43,24 +43,16 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<void> register(
     String email,
+    String username,
     String password,
-    String confirmPassword,
-    String name,
-    String surname,
-    DateTime birthday,
-    String phoneNumber,
   ) async {
     final response = await client.post(
       Uri.parse('$baseUrl/Auth/Register'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'email': email,
+        'username': username,
         'password': password,
-        'confirmPassword': confirmPassword,
-        'name': name,
-        'surname': surname,
-        'birthday': birthday.toIso8601String(),
-        'phoneNumber': phoneNumber,
       }),
     );
 

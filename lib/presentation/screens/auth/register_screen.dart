@@ -7,12 +7,9 @@ class RegisterScreen extends ConsumerWidget {
   RegisterScreen({super.key});
 
   final emailController = TextEditingController();
+  final usernameController = TextEditingController();
   final passwordConfirmController = TextEditingController();
   final passwordController = TextEditingController();
-  final nameController = TextEditingController();
-  final surnameController = TextEditingController();
-  final phoneNumberController = TextEditingController();
-  final birthdayController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -44,50 +41,43 @@ class RegisterScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 32),
               _buildTextField(emailController, 'Email'),
+              _buildTextField(usernameController, 'Username'),
               _buildTextField(passwordController, 'Password', obscure: true),
               _buildTextField(passwordConfirmController, 'Confirm Password',
                   obscure: true),
-              _buildTextField(nameController, 'Name'),
-              _buildTextField(surnameController, 'Surname'),
-              _buildTextField(phoneNumberController, 'Phone Number'),
-              _buildTextField(
-                birthdayController,
-                'Birthday',
-                readOnly: true,
-                suffixIcon: IconButton(
-                  icon: const Icon(Icons.calendar_today, color: Colors.white70),
-                  onPressed: () async {
-                    final pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now()
-                          .subtract(const Duration(days: 365 * 18)),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime.now(),
-                    );
-                    if (pickedDate != null) {
-                      birthdayController.text =
-                          pickedDate.toIso8601String().split('T').first;
-                    }
-                  },
-                ),
-              ),
+              // _buildTextField(
+              //   birthdayController,
+              //   'Birthday',
+              //   readOnly: true,
+              //   suffixIcon: IconButton(
+              //     icon: const Icon(Icons.calendar_today, color: Colors.white70),
+              //     onPressed: () async {
+              //       final pickedDate = await showDatePicker(
+              //         context: context,
+              //         initialDate: DateTime.now()
+              //             .subtract(const Duration(days: 365 * 18)),
+              //         firstDate: DateTime(1900),
+              //         lastDate: DateTime.now(),
+              //       );
+              //       if (pickedDate != null) {
+              //         birthdayController.text =
+              //             pickedDate.toIso8601String().split('T').first;
+              //       }
+              //     },
+              //   ),
+              // ),
               const SizedBox(height: 24),
               authState.isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : GestureDetector(
                       onTap: () async {
                         try {
-                          final birthday =
-                              DateTime.parse(birthdayController.text.trim());
+                          // final birthday =
+                          //     DateTime.parse(birthdayController.text.trim());
                           await authNotifier.register(
-                            emailController.text.trim(),
-                            passwordController.text.trim(),
-                            passwordConfirmController.text.trim(),
-                            nameController.text.trim(),
-                            surnameController.text.trim(),
-                            birthday,
-                            phoneNumberController.text.trim(),
-                          );
+                              emailController.text.trim(),
+                              usernameController.text.trim(),
+                              passwordController.text.trim());
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
