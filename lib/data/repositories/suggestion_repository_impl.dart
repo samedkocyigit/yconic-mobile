@@ -22,7 +22,8 @@ class SuggestionRepositoryImpl implements SuggestionRepository {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final suggestionModel = SuggestionModel.fromJson(data);
+      final userJson = data['data'];
+      final suggestionModel = SuggestionModel.fromJson(userJson);
       return suggestionModel.toEntity();
     } else {
       throw Exception(
@@ -37,7 +38,8 @@ class SuggestionRepositoryImpl implements SuggestionRepository {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final suggestionModel = SuggestionModel.fromJson(data);
+      final userJson = data['data'];
+      final suggestionModel = SuggestionModel.fromJson(userJson);
       return suggestionModel.toEntity();
     } else {
       throw Exception(

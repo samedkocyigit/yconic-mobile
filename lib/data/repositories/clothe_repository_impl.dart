@@ -24,7 +24,8 @@ class ClotheRepositoryImpl implements ClotheRepository {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final clotheModel = ClotheModel.fromJson(data);
+      final userJson = data['data'];
+      final clotheModel = ClotheModel.fromJson(userJson);
       return clotheModel.toEntity();
     } else {
       throw Exception(
@@ -40,7 +41,9 @@ class ClotheRepositoryImpl implements ClotheRepository {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final clotheModel = ClotheModel.fromJson(data);
+      final userJson = data['data'];
+
+      final clotheModel = ClotheModel.fromJson(userJson);
       return clotheModel.toEntity();
     } else {
       throw Exception('Update process has been failed: ${response.statusCode}');

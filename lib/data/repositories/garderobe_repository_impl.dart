@@ -22,7 +22,8 @@ class GarderobeRepositoryImpl implements GarderobeRepository {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final garderobeModel = GarderobeModel.fromJson(data);
+      final userJson = data['data'];
+      final garderobeModel = GarderobeModel.fromJson(userJson);
       return garderobeModel.toEntity();
     } else {
       throw Exception(
@@ -38,7 +39,8 @@ class GarderobeRepositoryImpl implements GarderobeRepository {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final garderobeModel = GarderobeModel.fromJson(data);
+      final userJson = data['data'];
+      final garderobeModel = GarderobeModel.fromJson(userJson);
       return garderobeModel.toEntity();
     } else {
       throw Exception('Update process has been failed: ${response.statusCode}');

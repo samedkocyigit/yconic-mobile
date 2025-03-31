@@ -25,7 +25,8 @@ class ClotheCategoryRepositoryImpl implements ClotheCategoryRepository {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final clotheCategoryModel = ClotheCategoryModel.fromJson(data);
+      final userJson = data['data'];
+      final clotheCategoryModel = ClotheCategoryModel.fromJson(userJson);
       return clotheCategoryModel.toEntity();
     } else {
       throw Exception(
@@ -43,7 +44,8 @@ class ClotheCategoryRepositoryImpl implements ClotheCategoryRepository {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final clotheCategoryModel = ClotheCategoryModel.fromJson(data);
+      final userJson = data['data'];
+      final clotheCategoryModel = ClotheCategoryModel.fromJson(userJson);
       return clotheCategoryModel.toEntity();
     } else {
       throw Exception('Update process has been failed: ${response.statusCode}');
@@ -59,7 +61,8 @@ class ClotheCategoryRepositoryImpl implements ClotheCategoryRepository {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final clotheCategoryModel = ClotheCategoryModel.fromJson(data);
+      final userJson = data['data'];
+      final clotheCategoryModel = ClotheCategoryModel.fromJson(userJson);
       return clotheCategoryModel.toEntity();
     } else {
       throw Exception(

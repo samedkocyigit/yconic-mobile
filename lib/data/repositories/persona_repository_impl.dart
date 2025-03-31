@@ -22,7 +22,8 @@ class PersonaRepositoryImpl implements PersonaRepository {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final personaModel = PersonaModel.fromJson(data);
+      final userJson = data['data'];
+      final personaModel = PersonaModel.fromJson(userJson);
       return personaModel.toEntity();
     } else {
       throw Exception(
@@ -38,7 +39,8 @@ class PersonaRepositoryImpl implements PersonaRepository {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
-      final personaModel = PersonaModel.fromJson(data);
+      final userJson = data['data'];
+      final personaModel = PersonaModel.fromJson(userJson);
       return personaModel.toEntity();
     } else {
       throw Exception('Update process has been failed: ${response.statusCode}');
