@@ -5,6 +5,7 @@ import 'package:yconic/domain/entities/persona.dart';
 class User {
   final String Id;
   final String Email;
+  final String Username;
   final String? Name;
   final String? Surname;
   final int? Role;
@@ -22,6 +23,7 @@ class User {
   User({
     required this.Id,
     required this.Email,
+    required this.Username,
     this.Name,
     this.Surname,
     this.Role,
@@ -41,6 +43,7 @@ class User {
     return {
       'id': Id,
       'email': Email,
+      'username': Username,
       'name': Name,
       'surname': Surname,
       'role': Role,
@@ -59,6 +62,6 @@ class User {
 
   @override
   String toString() {
-    return 'User(id: $Id, email: $Email, name: $Name, garderobe: $UserGarderobe, garderobeId: $UserGarderobeId)';
+    return 'User(id: $Id, email: $Email, username: $Username, name: $Name, garderobe: $UserGarderobe, garderobeId: $UserGarderobeId)';
   }
 }
