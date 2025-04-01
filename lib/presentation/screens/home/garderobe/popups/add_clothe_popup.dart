@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
 import 'package:yconic/data/dtos/clothe/create_clothe_dto.dart';
@@ -37,9 +38,9 @@ class _AddClothePopupState extends ConsumerState<AddClothePopup> {
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
-        left: 16,
-        right: 16,
-        top: 16,
+        left: 16.w,
+        right: 16.w,
+        top: 16.h,
       ),
       child: SingleChildScrollView(
         child: Form(
@@ -48,59 +49,72 @@ class _AddClothePopupState extends ConsumerState<AddClothePopup> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Add New Clothe", style: AppTextStyles.title),
-              const SizedBox(height: 16),
+              Text("Add New Clothe",
+                  style: AppTextStyles.title.copyWith(fontSize: 24.sp)),
+              SizedBox(height: 16.h),
               TextFormField(
                 controller: nameController,
                 decoration: InputDecoration(
-                  labelText: "Clothe Name",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
+                    labelText: "Clothe Name",
+                    labelStyle:
+                        AppTextStyles.body.copyWith(color: Colors.black),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                        borderSide: BorderSide(color: Colors.grey.shade400)),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h)),
                 validator: (value) => value == null || value.isEmpty
                     ? "Please enter a name"
                     : null,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12.h),
               TextFormField(
                 controller: brandController,
                 decoration: InputDecoration(
-                  labelText: "Brand (optional)",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
-                ),
+                    labelText: "Brand (optional)",
+                    labelStyle:
+                        AppTextStyles.body.copyWith(color: Colors.black),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                        borderSide: BorderSide(color: Colors.grey.shade400)),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h)),
               ),
-              const SizedBox(height: 12),
-              Text("Photos", style: AppTextStyles.bodyBold),
-              const SizedBox(height: 8),
+              SizedBox(height: 12.h),
+              Text("Photos",
+                  style: AppTextStyles.bodyBold.copyWith(fontSize: 16.sp)),
+              SizedBox(height: 8.h),
               Wrap(
-                spacing: 8,
-                runSpacing: 8,
+                spacing: 8.w,
+                runSpacing: 8.h,
                 children: [
                   ...selectedImages.map((img) => ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12.r),
                         child: Image.file(
                           File(img.path),
-                          height: 80,
-                          width: 80,
+                          height: 100.h,
+                          width: 100.w,
                           fit: BoxFit.cover,
                         ),
                       )),
                   GestureDetector(
                     onTap: pickImages,
                     child: Container(
-                      height: 80,
-                      width: 80,
+                      height: 100.h,
+                      width: 100.w,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(color: Colors.grey.shade400),
                       ),
-                      child: const Icon(Icons.add_a_photo_outlined),
+                      child: Icon(
+                        Icons.add_a_photo_outlined,
+                        size: 32.sp,
+                      ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               Center(
                 child: ElevatedButton(
                   onPressed: () async {
@@ -143,17 +157,20 @@ class _AddClothePopupState extends ConsumerState<AddClothePopup> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 16),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 32.w, vertical: 18.h),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(16.r),
                     ),
                   ),
-                  child:
-                      const Text("Save", style: TextStyle(color: Colors.white)),
+                  child: Text("Save",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500)),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
             ],
           ),
         ),

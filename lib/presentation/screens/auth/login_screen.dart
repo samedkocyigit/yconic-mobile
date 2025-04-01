@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends ConsumerWidget {
   LoginScreen({super.key});
@@ -24,30 +25,30 @@ class LoginScreen extends ConsumerWidget {
         ),
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
+            padding: EdgeInsets.symmetric(horizontal: 32.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Login',
                   style: TextStyle(
-                    fontSize: 48,
+                    fontSize: 48.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                const SizedBox(height: 48),
+                SizedBox(height: 48.h),
                 _buildTextField(
                   controller: emailController,
                   hintText: 'Email',
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
                 _buildTextField(
                   controller: passwordController,
                   hintText: 'Password',
                   obscureText: true,
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: 32.h),
                 authState.isLoading
                     ? const Center(child: CircularProgressIndicator())
                     : _buildGradientButton(
@@ -120,7 +121,7 @@ class LoginScreen extends ConsumerWidget {
         obscureText: obscureText,
         decoration: InputDecoration(
           contentPadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
           hintText: hintText,
           hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
           border: InputBorder.none,
@@ -137,7 +138,7 @@ class LoginScreen extends ConsumerWidget {
       onTap: onPressed,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.symmetric(vertical: 16),
+        padding: EdgeInsets.symmetric(vertical: 16.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
           gradient: const LinearGradient(
@@ -146,12 +147,12 @@ class LoginScreen extends ConsumerWidget {
             end: Alignment.centerRight,
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
             'Log in',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 18,
+              fontSize: 18.sp,
               fontWeight: FontWeight.bold,
             ),
           ),

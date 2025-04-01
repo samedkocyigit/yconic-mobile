@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
 import 'package:yconic/domain/entities/clothe.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,7 +54,7 @@ class _ClotheDetailScreenState extends ConsumerState<ClotheDetailScreen> {
               leading: const Icon(Icons.edit),
               title: const Text("Edit"),
               onTap: () async {
-                Navigator.pop(context); // bottom sheet kapat
+                Navigator.pop(context);
 
                 final result =
                     await showEditClothePopup(context, ref, widget.clothe);
@@ -169,44 +170,44 @@ class _ClotheDetailScreenState extends ConsumerState<ClotheDetailScreen> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.w),
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
             child: Image.network(
               mainImageUrl,
-              height: 300,
+              height: 300.h,
               fit: BoxFit.contain,
-              errorBuilder: (ctx, _, __) => const Icon(
+              errorBuilder: (ctx, _, __) => Icon(
                 Icons.image_not_supported,
-                size: 100,
+                size: 100.sp,
                 color: Colors.grey,
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           if (displayedClothe.ClothePhotos != null) ...[
             Text("More Photos", style: AppTextStyles.bodyBold),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             SizedBox(
-              height: 80,
+              height: 80.h,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
                 itemCount: displayedClothe.ClothePhotos!.length + 1,
-                separatorBuilder: (_, __) => const SizedBox(width: 12),
+                separatorBuilder: (_, __) => SizedBox(width: 12.w),
                 itemBuilder: (context, index) {
                   if (index == displayedClothe.ClothePhotos!.length) {
                     return GestureDetector(
                       onTap: _showAddPhotoPopup,
                       child: Container(
-                        width: 80,
-                        height: 80,
+                        width: 80.w,
+                        height: 80.h,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Colors.grey.shade200,
                           border: Border.all(color: Colors.grey.shade400),
                         ),
-                        child: const Icon(Icons.add_a_photo, size: 28),
+                        child: Icon(Icons.add_a_photo, size: 28.sp),
                       ),
                     );
                   }
@@ -226,16 +227,16 @@ class _ClotheDetailScreenState extends ConsumerState<ClotheDetailScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: isSelected ? Colors.black : Colors.transparent,
-                          width: 2,
+                          width: 2.w,
                         ),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(6.r),
                         child: Image.network(
                           thumbUrl,
-                          width: 80,
-                          height: 80,
+                          width: 80.w,
+                          height: 80.h,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -244,17 +245,17 @@ class _ClotheDetailScreenState extends ConsumerState<ClotheDetailScreen> {
                 },
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: 16.h),
           ],
           Text("Brand", style: AppTextStyles.bodyBold),
           Text(displayedClothe.Brand.isNotEmpty ? displayedClothe.Brand : '-',
               style: AppTextStyles.body),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           if (displayedClothe.Description?.trim().isNotEmpty == true) ...[
             Text("Description", style: AppTextStyles.bodyBold),
             Text(displayedClothe.Description!.trim(),
                 style: AppTextStyles.body),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
           ]
 
           // if (description != null && description.isNotEmpty) ...[

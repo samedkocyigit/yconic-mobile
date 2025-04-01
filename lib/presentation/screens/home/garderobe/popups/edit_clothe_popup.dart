@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
 import 'package:yconic/data/dtos/clothe/patch_clothe_request_dto.dart';
 import 'package:yconic/domain/entities/clothe.dart';
@@ -12,7 +13,7 @@ Future<bool?> showEditClothePopup(
   return showDialog(
     context: context,
     builder: (context) => Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       backgroundColor: Colors.white,
       child: EditClothePopup(clothe: clothe),
     ),
@@ -53,7 +54,7 @@ class _EditClothePopupState extends ConsumerState<EditClothePopup> {
     );
 
     if (dto.name == null && dto.brand == null && dto.description == null) {
-      Navigator.pop(context); // no changes
+      Navigator.pop(context);
       return;
     }
 
@@ -69,7 +70,7 @@ class _EditClothePopupState extends ConsumerState<EditClothePopup> {
         ref.read(userProvider.notifier).state = updatedUser;
       }
 
-      Navigator.pop(context, true); // güncelleme yapıldı sinyali
+      Navigator.pop(context, true);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Clothing updated successfully.")),
       );
@@ -84,42 +85,41 @@ class _EditClothePopupState extends ConsumerState<EditClothePopup> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-        top: 16,
-        left: 16,
-        right: 16,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 16.h,
+        top: 16.h,
+        left: 16.w,
+        right: 16.w,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Edit Clothing", style: AppTextStyles.title),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           TextField(
             controller: nameController,
             decoration: const InputDecoration(labelText: "Name"),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           TextField(
             controller: brandController,
             decoration: const InputDecoration(labelText: "Brand"),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: 12.h),
           TextField(
             controller: descController,
             decoration: const InputDecoration(labelText: "Description"),
             maxLines: 3,
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
           Center(
             child: ElevatedButton(
               onPressed: _submit,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.r),
                 ),
               ),
               child: const Text("Save", style: TextStyle(color: Colors.white)),

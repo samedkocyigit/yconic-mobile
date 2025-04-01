@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yconic/presentation/screens/home/ai/ai_suggestion_screen.dart';
 import 'package:yconic/presentation/screens/home/explore/explore_screen.dart';
 import 'package:yconic/presentation/screens/home/garderobe/garderobe_screen.dart';
@@ -40,10 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
+          iconSize: 30.r,
           onTap: (index) => setState(() => _currentIndex = index),
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.transparent,
           selectedItemColor: const Color.fromARGB(255, 0, 0, 0),
+          selectedFontSize: 14.sp,
+          unselectedFontSize: 12.sp,
           unselectedItemColor: const Color.fromARGB(179, 0, 0, 0),
           elevation: 0,
           items: const [

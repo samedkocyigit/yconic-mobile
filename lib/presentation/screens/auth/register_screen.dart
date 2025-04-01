@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/screens/auth/login_screen.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RegisterScreen extends ConsumerWidget {
   RegisterScreen({super.key});
@@ -25,21 +26,21 @@ class RegisterScreen extends ConsumerWidget {
             end: Alignment.bottomRight,
           ),
         ),
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(24.w),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 80),
-              const Text(
+              SizedBox(height: 80.h),
+              Text(
                 'Register',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 36,
+                  fontSize: 36.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: 32.h),
               _buildTextField(emailController, 'Email'),
               _buildTextField(usernameController, 'Username'),
               _buildTextField(passwordController, 'Password', obscure: true),
@@ -66,7 +67,7 @@ class RegisterScreen extends ConsumerWidget {
               //     },
               //   ),
               // ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               authState.isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : GestureDetector(
@@ -95,26 +96,26 @@ class RegisterScreen extends ConsumerWidget {
                       },
                       child: Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        padding: EdgeInsets.symmetric(vertical: 8.h),
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: [Color(0xFFFF416C), Color(0xFFFF4B2B)],
                           ),
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(30.r),
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Text(
                             'Register',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 18,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
                       ),
                     ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -139,7 +140,7 @@ class RegisterScreen extends ConsumerWidget {
               ),
               if (authState.error != null)
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: EdgeInsets.only(top: 8.h),
                   child: Text(
                     authState.error!,
                     style: const TextStyle(color: Colors.redAccent),
@@ -155,7 +156,7 @@ class RegisterScreen extends ConsumerWidget {
   Widget _buildTextField(TextEditingController controller, String hint,
       {bool obscure = false, bool readOnly = false, Widget? suffixIcon}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: EdgeInsets.symmetric(vertical: 8.h),
       child: TextField(
         controller: controller,
         obscureText: obscure,
@@ -168,11 +169,11 @@ class RegisterScreen extends ConsumerWidget {
           fillColor: Colors.white10,
           suffixIcon: suffixIcon,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
             borderSide: const BorderSide(color: Colors.white30),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(16.r),
             borderSide: const BorderSide(color: Colors.white30),
           ),
         ),

@@ -6,6 +6,7 @@ import 'package:yconic/data/enums/category_types.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/providers/clothe_category/clothe_category_provider.dart';
 import 'package:yconic/presentation/providers/user/user_provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AddCategoryPopup extends ConsumerStatefulWidget {
   const AddCategoryPopup({super.key});
@@ -24,9 +25,9 @@ class _AddCategoryPopupState extends ConsumerState<AddCategoryPopup> {
     return Padding(
       padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
-          left: 16,
-          right: 16,
-          top: 16),
+          left: 16.w,
+          right: 16.w,
+          top: 16.h),
       child: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -34,31 +35,34 @@ class _AddCategoryPopupState extends ConsumerState<AddCategoryPopup> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text("Add Category", style: AppTextStyles.title),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               TextFormField(
                 controller: nameController,
                 decoration: InputDecoration(
-                  labelText: "Category Name",
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
-                ),
+                    labelText: "Category Name",
+                    labelStyle:
+                        AppTextStyles.body.copyWith(color: Colors.black),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.r),
+                        borderSide: BorderSide(color: Colors.grey.shade400)),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h)),
                 validator: (value) => (value == null || value.isEmpty)
                     ? "Enter a category name"
                     : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16.h),
               DropdownButtonFormField<CategoryTypes>(
                 value: selectedType,
                 decoration: InputDecoration(
                   labelText: "Category Type",
-                  labelStyle:
-                      AppTextStyles.bodyBold.copyWith(color: Colors.black),
+                  labelStyle: AppTextStyles.body.copyWith(color: Colors.black),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12.r),
                     borderSide: BorderSide(color: Colors.grey.shade400),
                   ),
                   contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
                 ),
                 style: AppTextStyles.body.copyWith(color: Colors.black),
                 dropdownColor: Colors.white,
@@ -79,14 +83,14 @@ class _AddCategoryPopupState extends ConsumerState<AddCategoryPopup> {
                 validator: (value) =>
                     value == null ? "Select a category type" : null,
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: 24.h),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(16.r),
                   ),
                 ),
                 onPressed: () async {
@@ -127,10 +131,13 @@ class _AddCategoryPopupState extends ConsumerState<AddCategoryPopup> {
                     }
                   }
                 },
-                child: const Text("Add Category",
-                    style: TextStyle(color: Colors.white)),
+                child: Text("Add Category",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400)),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 14.h),
             ],
           ),
         ),

@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/domain/entities/clothe.dart';
-import 'package:yconic/presentation/providers/clothe/clothe_provider.dart';
-import 'package:yconic/presentation/providers/clothe_category/clothe_category_provider.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yconic/core/theme/app_colors.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
-import 'package:yconic/presentation/screens/home/garderobe/popups/add_category_popup.dart';
-import 'package:yconic/presentation/screens/home/garderobe/popups/add_clothe_popup.dart';
-import 'package:yconic/presentation/screens/home/garderobe/clothe_detail/clothe_detail_screen.dart';
-import 'package:yconic/presentation/screens/home/garderobe/popups/edit_category_popup.dart';
+import 'package:yconic/domain/entities/clothe.dart';
 import 'package:yconic/domain/entities/clotheCategory.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
+import 'package:yconic/presentation/providers/clothe/clothe_provider.dart';
+import 'package:yconic/presentation/providers/clothe_category/clothe_category_provider.dart';
 import 'package:yconic/presentation/providers/user/user_provider.dart';
+import 'package:yconic/presentation/screens/home/garderobe/clothe_detail/clothe_detail_screen.dart';
+import 'package:yconic/presentation/screens/home/garderobe/popups/add_category_popup.dart';
+import 'package:yconic/presentation/screens/home/garderobe/popups/add_clothe_popup.dart';
+import 'package:yconic/presentation/screens/home/garderobe/popups/category_button_sheet.dart';
+import 'package:yconic/presentation/screens/home/garderobe/popups/clothe_buttom_sheet.dart';
+import 'package:yconic/presentation/screens/home/garderobe/popups/edit_category_popup.dart';
 import 'package:yconic/presentation/screens/home/garderobe/popups/edit_clothe_popup.dart';
+import 'package:yconic/presentation/screens/home/garderobe/widgets/category_tab_item.dart';
+import 'package:yconic/presentation/screens/home/garderobe/widgets/clothe_card.dart';
 
 class GarderobeScreen extends ConsumerStatefulWidget {
   const GarderobeScreen({super.key});
@@ -29,78 +34,32 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
     showModalBottomSheet(
       backgroundColor: Colors.white,
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
-      builder: (_) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.edit),
-            title: const Text('Edit'),
-            onTap: () {
-              Navigator.pop(context);
-              showEditCategoryPopup(context, category);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.delete),
-            title: const Text('Delete'),
-            onTap: () async {
-              Navigator.pop(context);
-              final confirm = await showDialog<bool>(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  backgroundColor: Colors.white,
-                  title: const Text("Delete Category"),
-                  content: Text(
-                      "Are you sure you want to delete '${category.Name}'?"),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(ctx, false),
-                      child: const Text("Cancel"),
-                    ),
-                    ElevatedButton(
-                      style:
-                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                      onPressed: () => Navigator.pop(ctx, true),
-                      child: const Text("Delete",
-                          style: TextStyle(color: Colors.white)),
-                    ),
-                  ],
-                ),
-              );
-
-              if (confirm == true) {
-                try {
-                  await ref
-                      .read(clotheCategoryNotifierProvider.notifier)
-                      .deleteClotheCategory(category.Id);
-
-                  final userId = ref.read(userProvider)?.Id;
-                  if (userId != null) {
-                    await ref
-                        .read(authNotifierProvider.notifier)
-                        .getUser(userId);
-                    final updatedUser = ref.read(authNotifierProvider).user;
-                    ref.read(userProvider.notifier).state = updatedUser;
-                  }
-
-                  if (selectedCategoryIndex >=
-                      ref.read(clotheCategoriesProvider).length) {
-                    setState(() {
-                      selectedCategoryIndex = 0;
-                    });
-                  }
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(e.toString())),
-                  );
-                }
-              }
-            },
-          ),
-        ],
+      builder: (_) => CategoryOptionsBottomSheet(
+        category: category,
+        onEdit: () => showEditCategoryPopup(context, category),
+        onDelete: () async {
+          try {
+            await ref
+                .read(clotheCategoryNotifierProvider.notifier)
+                .deleteClotheCategory(category.Id);
+            final userId = ref.read(userProvider)?.Id;
+            if (userId != null) {
+              await ref.read(authNotifierProvider.notifier).getUser(userId);
+              final updatedUser = ref.read(authNotifierProvider).user;
+              ref.read(userProvider.notifier).state = updatedUser;
+            }
+            if (selectedCategoryIndex >=
+                ref.read(clotheCategoriesProvider).length) {
+              setState(() => selectedCategoryIndex = 0);
+            }
+          } catch (e) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.toString())));
+          }
+        },
       ),
     );
   }
@@ -108,83 +67,60 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
   void _showClotheOptionsPopup(Clothe clothe) {
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
-      builder: (_) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text("Edit"),
-              onTap: () async {
-                Navigator.pop(context);
-
-                final result = await showEditClothePopup(context, ref, clothe);
-
-                if (result == true) {
-                  final updated = await ref
-                      .read(clotheNotifierProvider.notifier)
-                      .getClothe(clothe.Id);
-
-                  final garderobe = ref.read(userProvider)?.UserGarderobe;
-                  final category = garderobe?.ClothesCategories
-                      .firstWhere((c) => c.Id == clothe.CategoryId);
-
-                  if (category != null) {
-                    final index =
-                        category.Clothes.indexWhere((c) => c.Id == updated.Id);
-                    if (index != -1) {
-                      category.Clothes[index] = updated;
-                      ref.read(userProvider.notifier).state =
-                          ref.read(authNotifierProvider).user;
-                    }
-                  }
-                }
-              },
+      builder: (_) => ClotheOptionsBottomSheet(
+        onEdit: () async {
+          final result = await showEditClothePopup(context, ref, clothe);
+          if (result == true) {
+            final updated = await ref
+                .read(clotheNotifierProvider.notifier)
+                .getClothe(clothe.Id);
+            final garderobe = ref.read(userProvider)?.UserGarderobe;
+            final category = garderobe?.ClothesCategories
+                .firstWhere((c) => c.Id == clothe.CategoryId);
+            if (category != null) {
+              final index =
+                  category.Clothes.indexWhere((c) => c.Id == updated.Id);
+              if (index != -1) {
+                category.Clothes[index] = updated;
+                ref.read(userProvider.notifier).state =
+                    ref.read(authNotifierProvider).user;
+              }
+            }
+          }
+        },
+        onDelete: () async {
+          final confirm = await showDialog<bool>(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              title: const Text("Delete Clothing"),
+              content: const Text(
+                  "Are you sure you want to delete this clothing item?"),
+              actions: [
+                TextButton(
+                    onPressed: () => Navigator.pop(ctx, false),
+                    child: const Text("Cancel")),
+                TextButton(
+                    onPressed: () => Navigator.pop(ctx, true),
+                    child: const Text("Delete")),
+              ],
             ),
-            ListTile(
-              leading: const Icon(Icons.delete),
-              title: const Text('Delete'),
-              onTap: () async {
-                Navigator.pop(context);
+          );
 
-                final confirm = await showDialog<bool>(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: const Text("Delete Clothing"),
-                    content: const Text(
-                        "Are you sure you want to delete this clothing item?"),
-                    actions: [
-                      TextButton(
-                          onPressed: () => Navigator.pop(ctx, false),
-                          child: const Text("Cancel")),
-                      TextButton(
-                          onPressed: () => Navigator.pop(ctx, true),
-                          child: const Text("Delete")),
-                    ],
-                  ),
-                );
-
-                if (confirm == true) {
-                  await ref
-                      .read(clotheNotifierProvider.notifier)
-                      .deleteClothe(clothe.Id);
-
-                  final userId = ref.read(userProvider)?.Id;
-                  if (userId != null) {
-                    await ref
-                        .read(authNotifierProvider.notifier)
-                        .getUser(userId);
-                    final updatedUser = ref.read(authNotifierProvider).user;
-                    ref.read(userProvider.notifier).state = updatedUser;
-                  }
-                }
-              },
-            ),
-          ],
-        ),
+          if (confirm == true) {
+            await ref
+                .read(clotheNotifierProvider.notifier)
+                .deleteClothe(clothe.Id);
+            final userId = ref.read(userProvider)?.Id;
+            if (userId != null) {
+              await ref.read(authNotifierProvider.notifier).getUser(userId);
+              final updatedUser = ref.read(authNotifierProvider).user;
+              ref.read(userProvider.notifier).state = updatedUser;
+            }
+          }
+        },
       ),
     );
   }
@@ -197,9 +133,33 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
       return Scaffold(
         backgroundColor: Colors.white,
         body: Center(
-          child: Text(
-            "No categories found in your garderobe.",
-            style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "No categories found in your garderobe.",
+                  style: AppTextStyles.body
+                      .copyWith(color: AppColors.textSecondary),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 24.h),
+                ElevatedButton.icon(
+                  onPressed: () => showAddCategoryPopup(context),
+                  icon: const Icon(Icons.add),
+                  label: const Text("Add Category"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 14.h),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16.r)),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -209,86 +169,52 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        heroTag: null,
-        backgroundColor: Colors.black,
-        onPressed: () {
-          final selectedCategory = categories[selectedCategoryIndex];
-          showAddClothePopup(context, selectedCategory);
-        },
-        child: const Icon(Icons.add, color: Colors.white),
+      floatingActionButton: SizedBox(
+        width: 64.w,
+        height: 64.h,
+        child: FloatingActionButton(
+          heroTag: null,
+          backgroundColor: Colors.black,
+          onPressed: () => showAddClothePopup(context, selectedCategory),
+          child: Icon(Icons.add, size: 28.sp, color: Colors.white),
+        ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "My Garderobe",
-                style: AppTextStyles.headline,
-              ),
-              const SizedBox(height: 12),
+              Text("My Garderobe", style: AppTextStyles.headline),
+              SizedBox(height: 12.h),
               SizedBox(
-                height: 42,
+                height: 42.h,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: categories.length + 1,
-                  separatorBuilder: (_, __) => const SizedBox(width: 8),
+                  separatorBuilder: (_, __) => SizedBox(width: 8.w),
                   itemBuilder: (context, index) {
                     if (index == categories.length) {
                       return OutlinedButton(
-                        onPressed: () {
-                          showAddCategoryPopup(context);
-                        },
+                        onPressed: () => showAddCategoryPopup(context),
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
+                              borderRadius: BorderRadius.circular(20)),
                           side: BorderSide(color: Colors.grey.shade400),
                           backgroundColor: Colors.white,
                         ),
-                        child: Text(
-                          "+ Category",
-                          style: AppTextStyles.body,
-                        ),
+                        child: Text("+ Category", style: AppTextStyles.body),
                       );
                     }
 
                     final category = categories[index];
-                    final isSelected = selectedCategoryIndex == index;
-
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedCategoryIndex = index;
-                        });
-                      },
-                      onLongPress: () {
-                        _showCategoryOptionsDialog(context, category);
-                      },
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: isSelected ? Colors.black : Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: isSelected
-                                ? Colors.black
-                                : Colors.grey.shade400,
-                          ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            category.Name,
-                            style: AppTextStyles.bodyBold.copyWith(
-                              color: isSelected ? Colors.white : Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
+                    return CategoryTabItem(
+                      category: category,
+                      isSelected: selectedCategoryIndex == index,
+                      onTap: () =>
+                          setState(() => selectedCategoryIndex = index),
+                      onLongPress: () =>
+                          _showCategoryOptionsDialog(context, category),
                     );
                   },
                 ),
@@ -297,103 +223,45 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
               Expanded(
                 child: GridView.builder(
                   itemCount: selectedCategory.Clothes.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16.h,
+                    crossAxisSpacing: 16.w,
                     childAspectRatio: 0.65,
                   ),
-                  itemBuilder: (context, clothIndex) {
-                    final clothe = selectedCategory.Clothes[clothIndex];
-                    final imageUrl = 'http://10.0.2.2:5000${clothe.MainPhoto}';
-
-                    return Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(16),
-                        onTap: () async {
-                          final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  ClotheDetailScreen(clothe: clothe),
-                            ),
-                          );
-
-                          if (result is Map && result['deleted'] == true) {
-                            final userId = ref.read(userProvider)?.Id;
-                            if (userId != null) {
-                              await ref
-                                  .read(authNotifierProvider.notifier)
-                                  .getUser(userId);
-                              final updatedUser =
-                                  ref.read(authNotifierProvider).user;
-                              ref.read(userProvider.notifier).state =
-                                  updatedUser;
-                            }
-
-                            final categoryId = result['categoryId'];
-                            final categories =
-                                ref.read(clotheCategoriesProvider);
-                            final categoryIndex = categories
-                                .indexWhere((c) => c.Id == categoryId);
-
-                            if (categoryIndex != -1) {
-                              setState(() {
-                                selectedCategoryIndex = categoryIndex;
-                              });
-                            }
+                  itemBuilder: (context, index) {
+                    final clothe = selectedCategory.Clothes[index];
+                    return ClotheCard(
+                      clothe: clothe,
+                      onTap: () async {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ClotheDetailScreen(clothe: clothe),
+                          ),
+                        );
+                        if (result is Map && result['deleted'] == true) {
+                          final userId = ref.read(userProvider)?.Id;
+                          if (userId != null) {
+                            await ref
+                                .read(authNotifierProvider.notifier)
+                                .getUser(userId);
+                            final updatedUser =
+                                ref.read(authNotifierProvider).user;
+                            ref.read(userProvider.notifier).state = updatedUser;
                           }
-                        },
-                        onLongPress: () {
-                          _showClotheOptionsPopup(clothe);
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 10,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(16)),
-                                  child: Image.network(
-                                    Uri.encodeFull(imageUrl),
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (ctx, _, __) => const Icon(
-                                      Icons.image_not_supported,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.06,
-                                padding: const EdgeInsets.all(10),
-                                child: Text(
-                                  clothe.Name,
-                                  style: AppTextStyles.bodyBold
-                                      .copyWith(color: Colors.black),
-                                  textAlign: TextAlign.center,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+
+                          final categoryId = result['categoryId'];
+                          final categories = ref.read(clotheCategoriesProvider);
+                          final categoryIndex =
+                              categories.indexWhere((c) => c.Id == categoryId);
+                          if (categoryIndex != -1) {
+                            setState(
+                                () => selectedCategoryIndex = categoryIndex);
+                          }
+                        }
+                      },
+                      onLongPress: () => _showClotheOptionsPopup(clothe),
                     );
                   },
                 ),

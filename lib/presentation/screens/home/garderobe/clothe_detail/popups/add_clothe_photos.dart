@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
 import 'package:yconic/data/dtos/clothe_photos/create_clothe_photos.dto.dart';
@@ -69,56 +70,66 @@ class _AddClothePhotoPopupState extends ConsumerState<AddClothePhotoPopup> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Add Photos", style: AppTextStyles.title),
-          const SizedBox(height: 12),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              ...selectedImages.map((img) => ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(
-                      File(img.path),
-                      height: 80,
-                      width: 80,
-                      fit: BoxFit.cover,
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+        left: 16.w,
+        right: 16.w,
+        top: 16.h,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Add Photos", style: AppTextStyles.title),
+            SizedBox(height: 16.h),
+            Wrap(
+              spacing: 8.w,
+              runSpacing: 8.w,
+              children: [
+                ...selectedImages.map((img) => ClipRRect(
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: Image.file(
+                        File(img.path),
+                        height: 80.h,
+                        width: 80.w,
+                        fit: BoxFit.cover,
+                      ),
+                    )),
+                GestureDetector(
+                  onTap: pickImages,
+                  child: Container(
+                    height: 80.h,
+                    width: 80.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.r),
+                      border: Border.all(color: Colors.grey.shade400),
                     ),
-                  )),
-              GestureDetector(
-                onTap: pickImages,
-                child: Container(
-                  height: 80,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.grey.shade400),
+                    child: const Icon(Icons.add_a_photo_outlined),
                   ),
-                  child: const Icon(Icons.add_a_photo_outlined),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Center(
-            child: ElevatedButton(
-              onPressed: uploadPhotos,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16)),
-              ),
-              child:
-                  const Text("Upload", style: TextStyle(color: Colors.white)),
+              ],
             ),
-          )
-        ],
+            SizedBox(height: 24.h),
+            Center(
+              child: ElevatedButton(
+                onPressed: uploadPhotos,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.r)),
+                ),
+                child: Text("Upload",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400)),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
