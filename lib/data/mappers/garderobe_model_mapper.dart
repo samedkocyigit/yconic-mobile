@@ -8,7 +8,7 @@ extension GarderobeModelMapper on GarderobeModel {
       Id: id,
       Name: name,
       UserId: userId,
-      ClothesCategories: clothesCategory.map((s) => s.toEntity()).toList(),
+      ClothesCategories: categories.map((s) => s.toEntity()).toList(),
     );
   }
 }
