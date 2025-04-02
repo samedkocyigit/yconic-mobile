@@ -7,12 +7,13 @@ import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/providers/clothe/clothe_provider.dart';
 import 'package:yconic/presentation/providers/user/user_provider.dart';
 import 'package:yconic/presentation/screens/home/garderobe/clothe_detail/popups/add_clothe_photos.dart';
+import 'package:yconic/presentation/screens/home/garderobe/popups/clothe_buttom_sheet.dart';
 import 'package:yconic/presentation/screens/home/garderobe/popups/edit_clothe_popup.dart';
 
 class ClotheDetailScreen extends ConsumerStatefulWidget {
-  late Clothe clothe;
+  final Clothe clothe;
 
-  ClotheDetailScreen({super.key, required this.clothe});
+  const ClotheDetailScreen({super.key, required this.clothe});
 
   @override
   ConsumerState<ClotheDetailScreen> createState() => _ClotheDetailScreenState();
@@ -43,82 +44,47 @@ class _ClotheDetailScreenState extends ConsumerState<ClotheDetailScreen> {
   void _showOptionsMenu() {
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
-      builder: (_) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.edit),
-              title: const Text("Edit"),
-              onTap: () async {
-                Navigator.pop(context);
-
-                final result =
-                    await showEditClothePopup(context, ref, widget.clothe);
-
-                if (result == true) {
-                  final updated = await ref
-                      .read(clotheNotifierProvider.notifier)
-                      .getClothe(widget.clothe.Id);
-
-                  setState(() {
-                    clothe = updated;
-                  });
-                }
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete),
-              title: const Text("Delete"),
-              onTap: () async {
-                final confirm = await showDialog<bool>(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: const Text("Delete Clothing"),
-                    content: const Text(
-                        "Are you sure you want to delete this clothing item?"),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(ctx, false),
-                        child: const Text("Cancel"),
-                      ),
-                      TextButton(
-                        onPressed: () => Navigator.pop(ctx, true),
-                        child: const Text("Delete"),
-                      ),
-                    ],
-                  ),
-                );
-
-                if (confirm == true) {
-                  await ref
-                      .read(clotheNotifierProvider.notifier)
-                      .deleteClothe(widget.clothe.Id);
-
-                  final userId = ref.read(userProvider)?.Id;
-                  if (userId != null) {
-                    await ref
-                        .read(authNotifierProvider.notifier)
-                        .getUser(userId);
-                    final updatedUser = ref.read(authNotifierProvider).user;
-                    ref.read(userProvider.notifier).state = updatedUser;
-                  }
-
-                  if (mounted) {
-                    Navigator.pop(context);
-                    Navigator.pop(context, {
-                      'deleted': true,
-                      'categoryId': widget.clothe.CategoryId,
-                    });
-                  }
-                }
-              },
-            ),
-          ],
-        ),
+      builder: (_) => ClotheOptionsBottomSheet(
+        clothe: clothe,
+        onEdit: () async {
+          final result = await showEditClothePopup(context, ref, clothe);
+          if (result == true) {
+            final updated = await ref
+                .read(clotheNotifierProvider.notifier)
+                .getClothe(clothe.Id);
+            final garderobe = ref.read(userProvider)?.UserGarderobe;
+            final category = garderobe?.ClothesCategories
+                .firstWhere((c) => c.Id == clothe.CategoryId);
+            if (category != null) {
+              final index =
+                  category.Clothes.indexWhere((c) => c.Id == updated.Id);
+              if (index != -1) {
+                category.Clothes[index] = updated;
+                ref.read(userProvider.notifier).state =
+                    ref.read(authNotifierProvider).user;
+              }
+            }
+          }
+        },
+        onDelete: () async {
+          try {
+            await ref
+                .read(clotheNotifierProvider.notifier)
+                .deleteClothe(clothe.Id);
+            final userId = ref.read(userProvider)?.Id;
+            if (userId != null) {
+              await ref.read(authNotifierProvider.notifier).getUser(userId);
+              final updatedUser = ref.read(authNotifierProvider).user;
+              ref.read(userProvider.notifier).state = updatedUser;
+            }
+          } catch (e) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.toString())));
+          }
+        },
       ),
     );
   }
@@ -151,6 +117,7 @@ class _ClotheDetailScreenState extends ConsumerState<ClotheDetailScreen> {
                 content: Text(
                   displayedClothe.Name,
                   textAlign: TextAlign.center,
+                  style: AppTextStyles.body,
                 ),
               ),
             );
@@ -164,7 +131,7 @@ class _ClotheDetailScreenState extends ConsumerState<ClotheDetailScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.more_vert),
+            icon: Icon(Icons.more_vert, size: 24.sp),
             onPressed: _showOptionsMenu,
           )
         ],
@@ -187,7 +154,8 @@ class _ClotheDetailScreenState extends ConsumerState<ClotheDetailScreen> {
           ),
           SizedBox(height: 16.h),
           if (displayedClothe.ClothePhotos != null) ...[
-            Text("More Photos", style: AppTextStyles.bodyBold),
+            Text("More Photos",
+                style: AppTextStyles.bodyBold.copyWith(fontSize: 16.sp)),
             SizedBox(height: 8.h),
             SizedBox(
               height: 80.h,
@@ -247,22 +215,22 @@ class _ClotheDetailScreenState extends ConsumerState<ClotheDetailScreen> {
             ),
             SizedBox(height: 16.h),
           ],
-          Text("Brand", style: AppTextStyles.bodyBold),
-          Text(displayedClothe.Brand.isNotEmpty ? displayedClothe.Brand : '-',
-              style: AppTextStyles.body),
+          Text("Brand",
+              style: AppTextStyles.bodyBold.copyWith(fontSize: 16.sp)),
+          SizedBox(height: 4.h),
+          Text(
+            displayedClothe.Brand.isNotEmpty ? displayedClothe.Brand : '-',
+            style: AppTextStyles.body,
+          ),
           SizedBox(height: 12.h),
           if (displayedClothe.Description?.trim().isNotEmpty == true) ...[
-            Text("Description", style: AppTextStyles.bodyBold),
+            Text("Description",
+                style: AppTextStyles.bodyBold.copyWith(fontSize: 16.sp)),
+            SizedBox(height: 4.h),
             Text(displayedClothe.Description!.trim(),
                 style: AppTextStyles.body),
             SizedBox(height: 12.h),
           ]
-
-          // if (description != null && description.isNotEmpty) ...[
-          //   Text("Description", style: AppTextStyles.bodyBold),
-          //   Text(description, style: AppTextStyles.body),
-          //   const SizedBox(height: 24),
-          // ]
         ],
       ),
     );
