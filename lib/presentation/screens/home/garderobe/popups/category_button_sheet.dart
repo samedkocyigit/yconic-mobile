@@ -58,21 +58,42 @@ class CategoryOptionsBottomSheet extends StatelessWidget {
               final confirm = await showDialog<bool>(
                 context: context,
                 builder: (ctx) => AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16.r)),
                   backgroundColor: Colors.white,
-                  title: const Text("Delete Category"),
+                  title: Text(
+                    "Delete Category",
+                    style:
+                        TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                  ),
                   content: Text(
-                      "Are you sure you want to delete '\${category.Name}'?"),
+                    "Are you sure you want to delete '${category.Name}'?",
+                    style: TextStyle(fontSize: 14.sp),
+                  ),
+                  actionsPadding: EdgeInsets.only(bottom: 8.h, right: 8.w),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(ctx, false),
-                      child: const Text("Cancel"),
+                      child: Text(
+                        "Cancel",
+                        style: TextStyle(
+                            fontSize: 14.sp, color: Colors.grey.shade700),
+                      ),
                     ),
                     ElevatedButton(
-                      style:
-                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.w, vertical: 10.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
                       onPressed: () => Navigator.pop(ctx, true),
-                      child: const Text("Delete",
-                          style: TextStyle(color: Colors.white)),
+                      child: Text(
+                        "Delete",
+                        style: TextStyle(color: Colors.white, fontSize: 14.sp),
+                      ),
                     ),
                   ],
                 ),
