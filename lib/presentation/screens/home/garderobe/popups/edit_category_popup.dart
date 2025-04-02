@@ -46,13 +46,23 @@ class _EditCategoryPopupState extends ConsumerState<EditCategoryPopup> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Edit Category", style: AppTextStyles.title),
+              Text("Edit Category",
+                  style: AppTextStyles.title.copyWith(fontSize: 24.sp)),
               SizedBox(height: 16.h),
               TextFormField(
                 controller: nameController,
                 decoration: InputDecoration(
                   labelText: "Category Name",
+                  labelStyle: AppTextStyles.body.copyWith(color: Colors.black),
+                  filled: true,
+                  fillColor: Colors.grey.shade100,
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
                   border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(color: Colors.grey.shade300),
+                  ),
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
                     borderSide: BorderSide(color: Colors.grey.shade300),
                   ),
@@ -64,12 +74,15 @@ class _EditCategoryPopupState extends ConsumerState<EditCategoryPopup> {
               InputDecorator(
                 decoration: InputDecoration(
                   labelText: "Category Type",
+                  labelStyle: AppTextStyles.body.copyWith(color: Colors.black),
+                  filled: true,
+                  fillColor: Colors.grey.shade100,
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
                     borderSide: BorderSide(color: Colors.grey.shade300),
                   ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<CategoryTypes>(
@@ -147,13 +160,16 @@ class _EditCategoryPopupState extends ConsumerState<EditCategoryPopup> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     padding:
-                        EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+                        EdgeInsets.symmetric(horizontal: 32.w, vertical: 18.h),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.r),
                     ),
                   ),
-                  child:
-                      const Text("Save", style: TextStyle(color: Colors.white)),
+                  child: Text("Save",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w500)),
                 ),
               ),
               SizedBox(height: 16.h),

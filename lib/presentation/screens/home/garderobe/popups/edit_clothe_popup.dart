@@ -83,49 +83,103 @@ class _EditClothePopupState extends ConsumerState<EditClothePopup> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Padding(
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom + 16.h,
-        top: 16.h,
+        bottom: MediaQuery.of(context).viewInsets.bottom,
         left: 16.w,
         right: 16.w,
+        top: 16.h,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Edit Clothing", style: AppTextStyles.title),
-          SizedBox(height: 12.h),
-          TextField(
-            controller: nameController,
-            decoration: const InputDecoration(labelText: "Name"),
-          ),
-          SizedBox(height: 12.h),
-          TextField(
-            controller: brandController,
-            decoration: const InputDecoration(labelText: "Brand"),
-          ),
-          SizedBox(height: 12.h),
-          TextField(
-            controller: descController,
-            decoration: const InputDecoration(labelText: "Description"),
-            maxLines: 3,
-          ),
-          SizedBox(height: 20.h),
-          Center(
-            child: ElevatedButton(
-              onPressed: _submit,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16.r),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Edit Clothing",
+                style: AppTextStyles.title.copyWith(fontSize: 24.sp)),
+            SizedBox(height: 16.h),
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(
+                labelText: "Clothe Name",
+                labelStyle: AppTextStyles.body.copyWith(color: Colors.black),
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
                 ),
               ),
-              child: const Text("Save", style: TextStyle(color: Colors.white)),
             ),
-          ),
-        ],
+            SizedBox(height: 12.h),
+            TextField(
+              controller: brandController,
+              decoration: InputDecoration(
+                labelText: "Brand",
+                labelStyle: AppTextStyles.body.copyWith(color: Colors.black),
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+              ),
+            ),
+            SizedBox(height: 12.h),
+            TextField(
+              controller: descController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                labelText: "Description",
+                labelStyle: AppTextStyles.body.copyWith(color: Colors.black),
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+              ),
+            ),
+            SizedBox(height: 20.h),
+            Center(
+              child: ElevatedButton(
+                onPressed: _submit,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 32.w, vertical: 18.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                ),
+                child: Text("Save",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500)),
+              ),
+            ),
+            SizedBox(height: 16.h),
+          ],
+        ),
       ),
     );
   }
