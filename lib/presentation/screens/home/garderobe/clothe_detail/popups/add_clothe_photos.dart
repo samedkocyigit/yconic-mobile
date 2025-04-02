@@ -12,7 +12,7 @@ Future<bool?> showAddClothePhotoPopup(BuildContext context, String clotheId) {
   return showDialog<bool>(
     context: context,
     builder: (context) => Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       backgroundColor: Colors.white,
       child: AddClothePhotoPopup(clotheId: clotheId),
     ),
@@ -81,21 +81,24 @@ class _AddClothePhotoPopupState extends ConsumerState<AddClothePhotoPopup> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Add Photos", style: AppTextStyles.title),
+            Text("Add Photos",
+                style: AppTextStyles.title.copyWith(fontSize: 24.sp)),
             SizedBox(height: 16.h),
             Wrap(
               spacing: 8.w,
               runSpacing: 8.w,
               children: [
-                ...selectedImages.map((img) => ClipRRect(
-                      borderRadius: BorderRadius.circular(12.r),
-                      child: Image.file(
-                        File(img.path),
-                        height: 80.h,
-                        width: 80.w,
-                        fit: BoxFit.cover,
-                      ),
-                    )),
+                ...selectedImages.map(
+                  (img) => ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: Image.file(
+                      File(img.path),
+                      height: 80.h,
+                      width: 80.w,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
                 GestureDetector(
                   onTap: pickImages,
                   child: Container(
@@ -104,8 +107,9 @@ class _AddClothePhotoPopupState extends ConsumerState<AddClothePhotoPopup> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.r),
                       border: Border.all(color: Colors.grey.shade400),
+                      color: Colors.grey.shade100,
                     ),
-                    child: const Icon(Icons.add_a_photo_outlined),
+                    child: Icon(Icons.add_a_photo_outlined, size: 28.sp),
                   ),
                 ),
               ],
@@ -117,17 +121,20 @@ class _AddClothePhotoPopupState extends ConsumerState<AddClothePhotoPopup> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   padding:
-                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
+                      EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.r)),
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
                 ),
                 child: Text("Upload",
                     style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w400)),
+                      color: Colors.white,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    )),
               ),
-            )
+            ),
+            SizedBox(height: 8.h),
           ],
         ),
       ),
