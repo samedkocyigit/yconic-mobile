@@ -71,6 +71,7 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
       ),
       builder: (_) => ClotheOptionsBottomSheet(
+        clothe: clothe,
         onEdit: () async {
           final result = await showEditClothePopup(context, ref, clothe);
           if (result == true) {
@@ -92,24 +93,7 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
           }
         },
         onDelete: () async {
-          final confirm = await showDialog<bool>(
-            context: context,
-            builder: (ctx) => AlertDialog(
-              title: const Text("Delete Clothing"),
-              content: const Text(
-                  "Are you sure you want to delete this clothing item?"),
-              actions: [
-                TextButton(
-                    onPressed: () => Navigator.pop(ctx, false),
-                    child: const Text("Cancel")),
-                TextButton(
-                    onPressed: () => Navigator.pop(ctx, true),
-                    child: const Text("Delete")),
-              ],
-            ),
-          );
-
-          if (confirm == true) {
+          try {
             await ref
                 .read(clotheNotifierProvider.notifier)
                 .deleteClothe(clothe.Id);
@@ -119,6 +103,9 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
               final updatedUser = ref.read(authNotifierProvider).user;
               ref.read(userProvider.notifier).state = updatedUser;
             }
+          } catch (e) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.toString())));
           }
         },
       ),
