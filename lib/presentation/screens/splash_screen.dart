@@ -22,7 +22,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final tokenService = ref.read(tokenServiceProvider);
     final token = await tokenService.getToken();
 
-    if (token != null && token.isNotEmpty) {
+    if (token == null || token.isEmpty) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => LoginScreen()),
