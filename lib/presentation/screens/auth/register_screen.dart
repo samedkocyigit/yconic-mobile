@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/presentation/providers/auth/auth_provider.dart';
-import 'package:yconic/presentation/screens/auth/login_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 
 class RegisterScreen extends ConsumerWidget {
   RegisterScreen({super.key});
 
   final emailController = TextEditingController();
   final usernameController = TextEditingController();
-  final passwordConfirmController = TextEditingController();
   final passwordController = TextEditingController();
+  final passwordConfirmController = TextEditingController();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,134 +17,122 @@ class RegisterScreen extends ConsumerWidget {
     final authNotifier = ref.read(authNotifierProvider.notifier);
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF4B0082), Color(0xFF8A2BE2)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        padding: EdgeInsets.all(24.w),
+      backgroundColor: Colors.white,
+      body: Center(
         child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 32.w),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: 80.h),
-              Text(
-                'Register',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 36.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+              // Logo + Motto
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/yconic-text.png',
+                    width: 200.w,
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(height: 4.h),
+                  Image.asset(
+                    'assets/images/single-line-motto.png',
+                    width: 110.w,
+                    fit: BoxFit.contain,
+                  ),
+                ],
               ),
-              SizedBox(height: 32.h),
-              _buildTextField(emailController, 'Email'),
-              _buildTextField(usernameController, 'Username'),
-              _buildTextField(passwordController, 'Password', obscure: true),
-              _buildTextField(passwordConfirmController, 'Confirm Password',
-                  obscure: true),
-              // _buildTextField(
-              //   birthdayController,
-              //   'Birthday',
-              //   readOnly: true,
-              //   suffixIcon: IconButton(
-              //     icon: const Icon(Icons.calendar_today, color: Colors.white70),
-              //     onPressed: () async {
-              //       final pickedDate = await showDatePicker(
-              //         context: context,
-              //         initialDate: DateTime.now()
-              //             .subtract(const Duration(days: 365 * 18)),
-              //         firstDate: DateTime(1900),
-              //         lastDate: DateTime.now(),
-              //       );
-              //       if (pickedDate != null) {
-              //         birthdayController.text =
-              //             pickedDate.toIso8601String().split('T').first;
-              //       }
-              //     },
-              //   ),
-              // ),
-              SizedBox(height: 24.h),
-              authState.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : GestureDetector(
-                      onTap: () async {
-                        try {
-                          // final birthday =
-                          //     DateTime.parse(birthdayController.text.trim());
-                          await authNotifier.register(
-                              emailController.text.trim(),
-                              usernameController.text.trim(),
-                              passwordController.text.trim());
 
+              SizedBox(height: 36.h),
+
+              // Form Fields
+              _buildTextField(controller: emailController, hintText: 'Email'),
+              SizedBox(height: 16.h),
+              _buildTextField(
+                  controller: usernameController, hintText: 'Username'),
+              SizedBox(height: 16.h),
+              _buildTextField(
+                controller: passwordController,
+                hintText: 'Password',
+                obscureText: true,
+              ),
+              SizedBox(height: 16.h),
+              _buildTextField(
+                controller: passwordConfirmController,
+                hintText: 'Confirm Password',
+                obscureText: true,
+              ),
+              SizedBox(height: 24.h),
+
+              // Register Button or Loader
+              authState.isLoading
+                  ? const CircularProgressIndicator()
+                  : _buildButton(
+                      text: 'Register',
+                      onPressed: () async {
+                        if (emailController.text.trim().isEmpty ||
+                            usernameController.text.trim().isEmpty ||
+                            passwordController.text.trim().isEmpty ||
+                            passwordConfirmController.text.trim().isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content: Text("Registration Successful!")),
+                                content: Text("Please fill in all fields")),
                           );
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (_) => LoginScreen()),
-                          );
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(e.toString())),
-                          );
+                          return;
                         }
+
+                        if (passwordController.text.trim() !=
+                            passwordConfirmController.text.trim()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Passwords do not match")),
+                          );
+                          return;
+                        }
+
+                        await authNotifier.register(
+                          emailController.text.trim(),
+                          usernameController.text.trim(),
+                          passwordController.text.trim(),
+                        );
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text("Registration Successful!")),
+                        );
+
+                        Navigator.pushReplacementNamed(context, '/login');
                       },
-                      child: Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.symmetric(vertical: 8.h),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFFF416C), Color(0xFFFF4B2B)],
-                          ),
-                          borderRadius: BorderRadius.circular(30.r),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Register',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
                     ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 24.h),
+
+              // Already have an account
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Already have an account? ",
-                    style: TextStyle(color: Colors.white70),
-                  ),
+                  const Text("Already have an account? "),
                   GestureDetector(
-                    onTap: () => Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (_) => LoginScreen()),
-                    ),
+                    onTap: () =>
+                        Navigator.pushReplacementNamed(context, '/login'),
                     child: const Text(
                       'Log in',
                       style: TextStyle(
-                        color: Colors.lightBlueAccent,
                         fontWeight: FontWeight.bold,
+                        color: Colors.black87,
                       ),
                     ),
                   ),
                 ],
               ),
+
+              // Error message
               if (authState.error != null)
                 Padding(
-                  padding: EdgeInsets.only(top: 8.h),
+                  padding: EdgeInsets.only(top: 16.h),
                   child: Text(
                     authState.error!,
                     style: const TextStyle(color: Colors.redAccent),
                   ),
-                )
+                ),
             ],
           ),
         ),
@@ -153,28 +140,52 @@ class RegisterScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint,
-      {bool obscure = false, bool readOnly = false, Widget? suffixIcon}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hintText,
+    bool obscureText = false,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
       child: TextField(
         controller: controller,
-        obscureText: obscure,
-        readOnly: readOnly,
-        style: const TextStyle(color: Colors.white),
+        obscureText: obscureText,
         decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(color: Colors.white70),
-          filled: true,
-          fillColor: Colors.white10,
-          suffixIcon: suffixIcon,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.r),
-            borderSide: const BorderSide(color: Colors.white30),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16.r),
-            borderSide: const BorderSide(color: Colors.white30),
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
+          hintText: hintText,
+          hintStyle: TextStyle(color: Colors.grey[500]),
+          border: InputBorder.none,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButton({
+    required String text,
+    required VoidCallback onPressed,
+  }) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: 16.h),
+        decoration: BoxDecoration(
+          color: Colors.black87,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ),
