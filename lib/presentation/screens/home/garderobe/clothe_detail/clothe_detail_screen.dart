@@ -54,31 +54,31 @@ class _ClotheDetailScreenState extends ConsumerState<ClotheDetailScreen> {
           if (result == true) {
             final updated = await ref
                 .read(clotheNotifierProvider.notifier)
-                .getClothe(clothe.Id);
-            final garderobe = ref.read(userProvider)?.UserGarderobe;
-            final category = garderobe?.ClothesCategories
-                .firstWhere((c) => c.Id == clothe.CategoryId);
-            if (category != null) {
-              final index =
-                  category.Clothes.indexWhere((c) => c.Id == updated.Id);
-              if (index != -1) {
-                category.Clothes[index] = updated;
-                ref.read(userProvider.notifier).state =
-                    ref.read(authNotifierProvider).user;
-              }
-            }
+                .getClothe(widget.clothe.Id);
+
+            setState(() {
+              clothe = updated;
+            });
           }
         },
         onDelete: () async {
           try {
             await ref
                 .read(clotheNotifierProvider.notifier)
-                .deleteClothe(clothe.Id);
+                .deleteClothe(widget.clothe.Id);
+
             final userId = ref.read(userProvider)?.Id;
             if (userId != null) {
               await ref.read(authNotifierProvider.notifier).getUser(userId);
               final updatedUser = ref.read(authNotifierProvider).user;
               ref.read(userProvider.notifier).state = updatedUser;
+            }
+
+            if (mounted) {
+              Navigator.pop(context, {
+                'deleted': true,
+                'categoryId': widget.clothe.CategoryId,
+              });
             }
           } catch (e) {
             ScaffoldMessenger.of(context)
