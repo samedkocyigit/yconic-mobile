@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 
 class LoginScreen extends ConsumerWidget {
   LoginScreen({super.key});
@@ -15,89 +15,83 @@ class LoginScreen extends ConsumerWidget {
     final authNotifier = ref.read(authNotifierProvider.notifier);
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF1E1E2E), Color(0xFF881DFD)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Center(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 32.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 48.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+      backgroundColor: Colors.white,
+      body: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 32.w),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/images/yconic-text.png',
+                    width: 200.w,
+                    fit: BoxFit.contain,
                   ),
-                ),
-                SizedBox(height: 48.h),
-                _buildTextField(
-                  controller: emailController,
-                  hintText: 'Email',
-                ),
-                SizedBox(height: 16.h),
-                _buildTextField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  obscureText: true,
-                ),
-                SizedBox(height: 32.h),
-                authState.isLoading
-                    ? const Center(child: CircularProgressIndicator())
-                    : _buildGradientButton(
-                        text: 'Log in',
-                        onPressed: () async {
-                          await authNotifier.login(
-                            emailController.text.trim(),
-                            passwordController.text.trim(),
-                          );
-                          final updatedAuthState =
-                              ref.read(authNotifierProvider);
-                          if (updatedAuthState.user != null) {
-                            Navigator.pushReplacementNamed(context, '/home');
-                          }
-                        },
-                      ),
-                const SizedBox(height: 24),
-                Center(
-                  child: TextButton(
-                    onPressed: () => Navigator.pushReplacementNamed(
-                      context,
-                      '/register',
+                  SizedBox(height: 4.h),
+                  Image.asset(
+                    'assets/images/single-line-motto.png',
+                    width: 110.w,
+                    fit: BoxFit.contain,
+                  ),
+                ],
+              ),
+              SizedBox(height: 36.h),
+              _buildTextField(
+                controller: emailController,
+                hintText: 'Email',
+              ),
+              SizedBox(height: 16.h),
+              _buildTextField(
+                controller: passwordController,
+                hintText: 'Password',
+                obscureText: true,
+              ),
+              SizedBox(height: 24.h),
+              authState.isLoading
+                  ? const CircularProgressIndicator()
+                  : _buildButton(
+                      text: 'Log In',
+                      onPressed: () async {
+                        await authNotifier.login(
+                          emailController.text.trim(),
+                          passwordController.text.trim(),
+                        );
+                        final updated = ref.read(authNotifierProvider);
+                        if (updated.user != null) {
+                          Navigator.pushReplacementNamed(context, '/home');
+                        }
+                      },
                     ),
-                    child: const Text.rich(
-                      TextSpan(
-                        text: "Don't have an account? ",
-                        style: TextStyle(color: Colors.white70),
-                        children: [
-                          TextSpan(
-                            text: 'Sign up',
-                            style: TextStyle(
-                              color: Colors.blueAccent,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+              SizedBox(height: 24.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Don't have an account? "),
+                  GestureDetector(
+                    onTap: () =>
+                        Navigator.pushReplacementNamed(context, '/register'),
+                    child: const Text(
+                      'Sign up',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
                       ),
                     ),
                   ),
+                ],
+              ),
+              if (authState.error != null)
+                Padding(
+                  padding: EdgeInsets.only(top: 16.h),
+                  child: Text(
+                    authState.error!,
+                    style: const TextStyle(color: Colors.redAccent),
+                  ),
                 ),
-                if (authState.error != null)
-                  Center(
-                    child: Text(
-                      authState.error!,
-                      style: const TextStyle(color: Colors.redAccent),
-                    ),
-                  )
-              ],
-            ),
+            ],
           ),
         ),
       ),
@@ -111,26 +105,25 @@ class LoginScreen extends ConsumerWidget {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white24),
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey.shade300),
       ),
       child: TextField(
         controller: controller,
-        style: const TextStyle(color: Colors.white),
         obscureText: obscureText,
         decoration: InputDecoration(
           contentPadding:
               EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
           hintText: hintText,
-          hintStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+          hintStyle: TextStyle(color: Colors.grey[500]),
           border: InputBorder.none,
         ),
       ),
     );
   }
 
-  Widget _buildGradientButton({
+  Widget _buildButton({
     required String text,
     required VoidCallback onPressed,
   }) {
@@ -140,16 +133,12 @@ class LoginScreen extends ConsumerWidget {
         width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 16.h),
         decoration: BoxDecoration(
+          color: Colors.black87,
           borderRadius: BorderRadius.circular(30),
-          gradient: const LinearGradient(
-            colors: [Color(0xFFF857A6), Color(0xFFFF5858)],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
         ),
         child: Center(
           child: Text(
-            'Log in',
+            text,
             style: TextStyle(
               color: Colors.white,
               fontSize: 18.sp,
