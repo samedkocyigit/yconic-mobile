@@ -1,4 +1,4 @@
-import 'package:yconic/domain/repositories/clothePhoto_repository.dart';
+import 'package:yconic/domain/repositories/clothe_photo_repository.dart';
 
 class DeleteClothePhotoWithIdUsecase {
   final ClothePhotoRepository repository;

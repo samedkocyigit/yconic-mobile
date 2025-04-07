@@ -89,14 +89,42 @@ class _AddClothePhotoPopupState extends ConsumerState<AddClothePhotoPopup> {
               runSpacing: 8.w,
               children: [
                 ...selectedImages.map(
-                  (img) => ClipRRect(
-                    borderRadius: BorderRadius.circular(12.r),
-                    child: Image.file(
-                      File(img.path),
-                      height: 80.h,
-                      width: 80.w,
-                      fit: BoxFit.cover,
-                    ),
+                  (img) => Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12.r),
+                        child: Image.file(
+                          File(img.path),
+                          height: 80.h,
+                          width: 80.w,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      Positioned(
+                        top: -8,
+                        right: -8,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedImages.remove(img);
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 90, 89, 89),
+                              shape: BoxShape.circle,
+                            ),
+                            padding: EdgeInsets.all(4.w),
+                            child: Icon(
+                              Icons.close,
+                              size: 12.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 GestureDetector(
@@ -126,12 +154,14 @@ class _AddClothePhotoPopupState extends ConsumerState<AddClothePhotoPopup> {
                     borderRadius: BorderRadius.circular(16.r),
                   ),
                 ),
-                child: Text("Upload",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                    )),
+                child: Text(
+                  "Upload",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
               ),
             ),
             SizedBox(height: 8.h),

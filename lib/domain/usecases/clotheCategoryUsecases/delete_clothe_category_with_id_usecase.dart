@@ -1,4 +1,4 @@
-import 'package:yconic/domain/repositories/clotheCategory_repository.dart';
+import 'package:yconic/domain/repositories/clothe_category_repository.dart';
 
 class DeleteClotheCategoryWithIdUsecase {
   final ClotheCategoryRepository repository;

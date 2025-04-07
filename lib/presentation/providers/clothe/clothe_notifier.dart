@@ -2,10 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/data/dtos/clothe/create_clothe_dto.dart';
 import 'package:yconic/data/dtos/clothe/patch_clothe_request_dto.dart';
 import 'package:yconic/domain/entities/clothe.dart';
-import 'package:yconic/domain/usecases/clotheUsecases/createClothe_usecase.dart';
-import 'package:yconic/domain/usecases/clotheUsecases/deleteClotheWithId_usecase.dart';
-import 'package:yconic/domain/usecases/clotheUsecases/getClotheById_usecase.dart';
-import 'package:yconic/domain/usecases/clotheUsecases/updateClothe_usecase.dart';
+import 'package:yconic/domain/usecases/clotheUsecases/create_clothe_usecase.dart';
+import 'package:yconic/domain/usecases/clotheUsecases/delete_clothe_with_id_usecase.dart';
+import 'package:yconic/domain/usecases/clotheUsecases/get_clothe_by_id_usecase.dart';
+import 'package:yconic/domain/usecases/clotheUsecases/update_clothe_usecase.dart';
 import 'package:yconic/presentation/providers/clothe/clothe_state.dart';
 
 class ClotheNotifier extends StateNotifier<ClotheState> {

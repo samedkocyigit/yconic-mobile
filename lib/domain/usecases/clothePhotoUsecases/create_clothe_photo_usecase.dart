@@ -1,6 +1,6 @@
 import 'package:yconic/data/dtos/clothe_photos/create_clothe_photos.dto.dart';
-import 'package:yconic/domain/entities/clothePhoto.dart';
-import 'package:yconic/domain/repositories/clothePhoto_repository.dart';
+import 'package:yconic/domain/entities/clothe_photo.dart';
+import 'package:yconic/domain/repositories/clothe_photo_repository.dart';
 
 class CreateClothePhotoUsecase {
   final ClothePhotoRepository repository;

@@ -1,5 +1,5 @@
-import 'package:yconic/domain/entities/clotheCategory.dart';
-import 'package:yconic/domain/repositories/clotheCategory_repository.dart';
+import 'package:yconic/domain/entities/clothe_category.dart';
+import 'package:yconic/domain/repositories/clothe_category_repository.dart';
 
 class GetClotheCategoryByIdUsecase {
   final ClotheCategoryRepository repository;

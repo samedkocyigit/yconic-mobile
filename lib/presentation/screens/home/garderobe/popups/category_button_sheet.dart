@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:yconic/domain/entities/clotheCategory.dart';
+import 'package:yconic/domain/entities/clothe_category.dart';
 
 typedef CategoryActionCallback = void Function();
 

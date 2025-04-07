@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/domain/usecases/userUsecases/getUserById_usecase.dart';
+import 'package:yconic/domain/entities/simple_user.dart';
+import 'package:yconic/domain/usecases/userUsecases/get_user_by_id_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/login_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/register_usecase.dart';
 import 'package:yconic/presentation/providers/auth/auth_state.dart';
@@ -58,5 +59,108 @@ class AuthNotifier extends StateNotifier<AuthState> {
       print("🔥 getUser error: $e");
       state = state.copyWith(isLoading: false, error: e.toString());
     }
+  }
+}
+
+extension AuthNotifierExtensions on AuthNotifier {
+  void addFollowing(SimpleUser userToAdd) {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    final alreadyExists =
+        currentUser.Following?.any((u) => u.id == userToAdd.id) ?? false;
+    if (alreadyExists) return;
+
+    final updatedUser = currentUser.copyWith(
+      Following: [...?currentUser.Following, userToAdd],
+      FollowingCount: (currentUser.FollowingCount ?? 0) + 1,
+    );
+
+    state = state.copyWith(user: updatedUser);
+  }
+
+  void addSentFollowRequest(SimpleUser targetUser) {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    final alreadySent =
+        currentUser.SentFollowRequest?.any((u) => u.id == targetUser.id) ??
+            false;
+    if (alreadySent) return;
+
+    final updatedUser = currentUser.copyWith(
+      SentFollowRequest: [...?currentUser.SentFollowRequest, targetUser],
+    );
+
+    state = state.copyWith(user: updatedUser);
+  }
+
+  void addFollower(SimpleUser newFollower) {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    final alreadyExists =
+        currentUser.Followers?.any((f) => f.id == newFollower.id) ?? false;
+    if (alreadyExists) return;
+
+    final updated = currentUser.copyWith(
+      Followers: [...?currentUser.Followers, newFollower],
+      FollowerCount: (currentUser.FollowerCount ?? 0) + 1,
+    );
+
+    state = state.copyWith(user: updated);
+  }
+
+  void removeFollower(String followerId) {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    final updatedFollowers =
+        currentUser.Followers?.where((u) => u.id != followerId).toList();
+    final updated = currentUser.copyWith(
+      Followers: updatedFollowers,
+      FollowerCount: (currentUser.FollowerCount ?? 1) - 1,
+    );
+
+    state = state.copyWith(user: updated);
+  }
+
+  void removeFollowing(String followingId) {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    final updatedFollowing =
+        currentUser.Following?.where((u) => u.id != followingId).toList();
+    final updated = currentUser.copyWith(
+      Following: updatedFollowing,
+      FollowingCount: (currentUser.FollowingCount ?? 1) - 1,
+    );
+
+    state = state.copyWith(user: updated);
+  }
+
+  void removeSentFollowRequest(String userId) {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    final updated = currentUser.copyWith(
+      SentFollowRequest:
+          currentUser.SentFollowRequest?.where((u) => u.id != userId).toList(),
+    );
+
+    state = state.copyWith(user: updated);
+  }
+
+  void removeReceivedFollowRequest(String userId) {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    final updated = currentUser.copyWith(
+      RecievedFollowRequest:
+          currentUser.RecievedFollowRequest?.where((u) => u.id != userId)
+              .toList(),
+    );
+
+    state = state.copyWith(user: updated);
   }
 }

@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
 import 'package:yconic/data/dtos/clothe/create_clothe_dto.dart';
-import 'package:yconic/domain/entities/clotheCategory.dart';
+import 'package:yconic/domain/entities/clothe_category.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/providers/clothe/clothe_provider.dart';
 import 'package:yconic/presentation/providers/user/user_provider.dart';
@@ -86,30 +86,58 @@ class _AddClothePopupState extends ConsumerState<AddClothePopup> {
               SizedBox(height: 8.h),
               Wrap(
                 spacing: 8.w,
-                runSpacing: 8.h,
+                runSpacing: 8.w,
                 children: [
-                  ...selectedImages.map((img) => ClipRRect(
-                        borderRadius: BorderRadius.circular(12.r),
-                        child: Image.file(
-                          File(img.path),
-                          height: 100.h,
-                          width: 100.w,
-                          fit: BoxFit.cover,
+                  ...selectedImages.map(
+                    (img) => Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12.r),
+                          child: Image.file(
+                            File(img.path),
+                            height: 80.h,
+                            width: 80.w,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      )),
+                        Positioned(
+                          top: -8,
+                          right: -8,
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedImages.remove(img);
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 90, 89, 89),
+                                shape: BoxShape.circle,
+                              ),
+                              padding: EdgeInsets.all(4.w),
+                              child: Icon(
+                                Icons.close,
+                                size: 12.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   GestureDetector(
                     onTap: pickImages,
                     child: Container(
-                      height: 100.h,
-                      width: 100.w,
+                      height: 80.h,
+                      width: 80.w,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(color: Colors.grey.shade400),
+                        color: Colors.grey.shade100,
                       ),
-                      child: Icon(
-                        Icons.add_a_photo_outlined,
-                        size: 32.sp,
-                      ),
+                      child: Icon(Icons.add_a_photo_outlined, size: 28.sp),
                     ),
                   ),
                 ],

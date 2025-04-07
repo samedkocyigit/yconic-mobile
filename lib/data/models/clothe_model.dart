@@ -1,4 +1,4 @@
-import 'package:yconic/data/models/clothePhoto_model.dart';
+import 'package:yconic/data/models/clothe_photo_model.dart';
 
 class ClotheModel {
   final String id;

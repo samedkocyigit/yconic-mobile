@@ -1,10 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/data/dtos/clothe_category/create_clothe_category_dto.dart';
 import 'package:yconic/data/dtos/clothe_category/update_clothe_category_dto.dart';
-import 'package:yconic/domain/usecases/clotheCategoryUsecases/createClotheCategory_usecase.dart';
-import 'package:yconic/domain/usecases/clotheCategoryUsecases/deleteClotheCategoryWithId_usecase.dart';
-import 'package:yconic/domain/usecases/clotheCategoryUsecases/getClotheCategoryById_usecase.dart';
-import 'package:yconic/domain/usecases/clotheCategoryUsecases/updateClotheCategory_usecase.dart';
+import 'package:yconic/domain/usecases/clotheCategoryUsecases/create_clothe_category_usecase.dart';
+import 'package:yconic/domain/usecases/clotheCategoryUsecases/delete_clothe_category_with_id_usecase.dart';
+import 'package:yconic/domain/usecases/clotheCategoryUsecases/get_clothe_category_by_id_usecase.dart';
+import 'package:yconic/domain/usecases/clotheCategoryUsecases/update_clothe_category_usecase.dart';
 import 'package:yconic/presentation/providers/clothe_category/clothe_category_state.dart';
 
 class ClotheCategoryNotifier extends StateNotifier<ClotheCategoryState> {

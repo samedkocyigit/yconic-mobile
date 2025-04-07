@@ -1,30 +1,37 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/data/repositories/clotheCategory_repository_impl.dart';
-import 'package:yconic/data/repositories/clothePhoto_repository_impl.dart';
+import 'package:yconic/data/repositories/clothe_category_repository_impl.dart';
+import 'package:yconic/data/repositories/clothe_photo_repository_impl.dart';
 import 'package:yconic/data/repositories/clothe_repository_impl.dart';
 import 'package:yconic/data/repositories/garderobe_repository_impl.dart';
 import 'package:yconic/data/repositories/user_repository_impl.dart';
-import 'package:yconic/domain/repositories/clotheCategory_repository.dart';
-import 'package:yconic/domain/repositories/clothePhoto_repository.dart';
+import 'package:yconic/domain/repositories/clothe_category_repository.dart';
+import 'package:yconic/domain/repositories/clothe_photo_repository.dart';
 import 'package:yconic/domain/repositories/clothe_repository.dart';
 import 'package:yconic/domain/repositories/garderobe_repository.dart';
 import 'package:yconic/domain/repositories/user_repository.dart';
-import 'package:yconic/domain/usecases/clotheCategoryUsecases/createClotheCategory_usecase.dart';
-import 'package:yconic/domain/usecases/clotheCategoryUsecases/deleteClotheCategoryWithId_usecase.dart';
-import 'package:yconic/domain/usecases/clotheCategoryUsecases/getClotheCategoryById_usecase.dart';
-import 'package:yconic/domain/usecases/clotheCategoryUsecases/updateClotheCategory_usecase.dart';
-import 'package:yconic/domain/usecases/clothePhotoUsecases/createClothePhoto_usecase.dart';
-import 'package:yconic/domain/usecases/clothePhotoUsecases/deleteClothePhotoWithId_usecase.dart';
-import 'package:yconic/domain/usecases/clotheUsecases/createClothe_usecase.dart';
-import 'package:yconic/domain/usecases/clotheUsecases/deleteClotheWithId_usecase.dart';
-import 'package:yconic/domain/usecases/clotheUsecases/getClotheById_usecase.dart';
-import 'package:yconic/domain/usecases/clotheUsecases/updateClothe_usecase.dart';
-import 'package:yconic/domain/usecases/garderobeUsecases/deleteGarderobeWithId_usecase.dart';
-import 'package:yconic/domain/usecases/garderobeUsecases/getGarderobeById_usecase.dart';
-import 'package:yconic/domain/usecases/garderobeUsecases/updateGarderobe_usecase.dart';
-import 'package:yconic/domain/usecases/userUsecases/getUserById_usecase.dart';
+import 'package:yconic/domain/usecases/clotheCategoryUsecases/create_clothe_category_usecase.dart';
+import 'package:yconic/domain/usecases/clotheCategoryUsecases/delete_clothe_category_with_id_usecase.dart';
+import 'package:yconic/domain/usecases/clotheCategoryUsecases/get_clothe_category_by_id_usecase.dart';
+import 'package:yconic/domain/usecases/clotheCategoryUsecases/update_clothe_category_usecase.dart';
+import 'package:yconic/domain/usecases/clothePhotoUsecases/create_clothe_photo_usecase.dart';
+import 'package:yconic/domain/usecases/clothePhotoUsecases/delete_clothe_photo_with_id_usecase.dart';
+import 'package:yconic/domain/usecases/clotheUsecases/create_clothe_usecase.dart';
+import 'package:yconic/domain/usecases/clotheUsecases/delete_clothe_with_id_usecase.dart';
+import 'package:yconic/domain/usecases/clotheUsecases/get_clothe_by_id_usecase.dart';
+import 'package:yconic/domain/usecases/clotheUsecases/update_clothe_usecase.dart';
+import 'package:yconic/domain/usecases/garderobeUsecases/delete_garderobe_with_id_usecase.dart';
+import 'package:yconic/domain/usecases/garderobeUsecases/get_garderobe_by_id_usecase.dart';
+import 'package:yconic/domain/usecases/garderobeUsecases/update_garderobe_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/accept_follow_request_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/decline_follow_request_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/follow_user_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/get_all_users_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/get_public_user_profile_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/get_user_by_id_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/login_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/register_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/send_follow_request_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/unfollow_user_usecase.dart';
 import 'package:yconic/presentation/providers/token_provider.dart';
 
 const String baseUrl = 'http://10.0.2.2:5000/api';
@@ -53,6 +60,44 @@ final getUserByIdUseCaseProvider = Provider<GetUserByIdUsecase>((ref) {
   return GetUserByIdUsecase(repository);
 });
 
+final getPublicUserProfileUsecaseProvider =
+    Provider<GetPublicUserProfileUsecase>((ref) {
+  final repository = ref.watch(userRepositoryProvider);
+  return GetPublicUserProfileUsecase(repository);
+});
+
+final getAllUsersUsecaseProvider = Provider<GetAllUsersUsecase>((ref) {
+  final repository = ref.watch(userRepositoryProvider);
+  return GetAllUsersUsecase(repository);
+});
+
+/* -------------------------------------
+              Follow
+----------------------------------------*/
+final sendFollowRequestUsecaseProvider = Provider((ref) {
+  final repo = ref.watch(userRepositoryProvider);
+  return SendFollowRequestUsecase(repo);
+});
+
+final acceptFollowRequestUsecaseProvider = Provider((ref) {
+  final repo = ref.watch(userRepositoryProvider);
+  return AcceptFollowRequestUsecase(repo);
+});
+
+final declineFollowRequestUsecaseProvider = Provider((ref) {
+  final repo = ref.watch(userRepositoryProvider);
+  return DeclineFollowRequestUsecase(repo);
+});
+
+final followUserUsecaseProvider = Provider((ref) {
+  final repo = ref.watch(userRepositoryProvider);
+  return FollowUserUsecase(repo);
+});
+
+final unfollowUserUsecaseProvider = Provider((ref) {
+  final repo = ref.watch(userRepositoryProvider);
+  return UnfollowUserUsecase(repo);
+});
 /*--------------------------------------
                Clothe Category
 ----------------------------------------*/
@@ -89,6 +134,7 @@ final getClotheCategoryByIdUseCaseProvider =
 /*--------------------------------------
                Garderobe
 ----------------------------------------*/
+
 final garderobeRepositoryProvider = Provider<GarderobeRepository>((ref) {
   return GarderobeRepositoryImpl(baseUrl: baseUrl);
 });

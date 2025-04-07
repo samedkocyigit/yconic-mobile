@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
 import 'package:yconic/data/enums/category_types.dart';
-import 'package:yconic/domain/entities/clotheCategory.dart';
+import 'package:yconic/domain/entities/clothe_category.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/providers/clothe_category/clothe_category_provider.dart';
 import 'package:yconic/presentation/providers/user/user_provider.dart';

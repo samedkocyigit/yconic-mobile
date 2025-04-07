@@ -23,7 +23,7 @@ class SuggestionModel {
       userId: json['userId'] as String,
       description: json['description'] as String?,
       image: json['image'] as String?,
-      createdAt: json['createdAt'] as String, // veya DateTime parse
+      createdAt: json['createdAt'] as String,
       suggestedLook: (json['suggestedLook'] as List)
           .map((e) => ClotheModel.fromJson(e as Map<String, dynamic>))
           .toList(),

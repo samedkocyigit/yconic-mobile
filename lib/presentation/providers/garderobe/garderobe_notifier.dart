@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/domain/entities/garderobe.dart';
-import 'package:yconic/domain/usecases/garderobeUsecases/deleteGarderobeWithId_usecase.dart';
-import 'package:yconic/domain/usecases/garderobeUsecases/getGarderobeById_usecase.dart';
-import 'package:yconic/domain/usecases/garderobeUsecases/updateGarderobe_usecase.dart';
+import 'package:yconic/domain/usecases/garderobeUsecases/delete_garderobe_with_id_usecase.dart';
+import 'package:yconic/domain/usecases/garderobeUsecases/get_garderobe_by_id_usecase.dart';
+import 'package:yconic/domain/usecases/garderobeUsecases/update_garderobe_usecase.dart';
 import 'package:yconic/presentation/providers/garderobe/garderobe_state.dart';
 
 class GarderobeNotifier extends StateNotifier<GarderobeState> {

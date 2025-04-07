@@ -73,6 +73,7 @@ flutter:
   assets:
     - assets/images/yconic-text.png
     - assets/images/single-line-motto.png
+    - assets/default_avatar.jpg
 
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

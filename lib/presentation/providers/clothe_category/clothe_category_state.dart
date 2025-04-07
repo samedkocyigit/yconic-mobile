@@ -1,4 +1,4 @@
-import 'package:yconic/domain/entities/clotheCategory.dart';
+import 'package:yconic/domain/entities/clothe_category.dart';
 
 class ClotheCategoryState {
   final bool isLoading;

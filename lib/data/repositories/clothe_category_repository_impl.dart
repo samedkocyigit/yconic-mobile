@@ -3,11 +3,12 @@ import 'dart:convert' show jsonDecode, jsonEncode;
 import 'package:http/http.dart' as http;
 import 'package:yconic/data/dtos/clothe_category/create_clothe_category_dto.dart';
 import 'package:yconic/data/dtos/clothe_category/update_clothe_category_dto.dart';
-import 'package:yconic/data/mappers/clotheCategory_model_mapper.dart';
-import 'package:yconic/data/models/clotheCategory_model.dart'
+import 'package:yconic/data/mappers/clothe_category_model_mapper.dart';
+import 'package:yconic/data/models/clothe_category_model.dart'
     show ClotheCategoryModel;
-import 'package:yconic/domain/entities/clotheCategory.dart' show ClotheCategory;
-import 'package:yconic/domain/repositories/clotheCategory_repository.dart';
+import 'package:yconic/domain/entities/clothe_category.dart'
+    show ClotheCategory;
+import 'package:yconic/domain/repositories/clothe_category_repository.dart';
 
 class ClotheCategoryRepositoryImpl implements ClotheCategoryRepository {
   final String baseUrl;

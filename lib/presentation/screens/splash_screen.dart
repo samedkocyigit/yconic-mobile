@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/presentation/providers/token_provider.dart';
-import 'package:yconic/presentation/screens/auth/login_screen.dart';
-import 'package:yconic/presentation/screens/home/home_screen.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -20,18 +18,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   Future<void> _checkAuth() async {
     final tokenService = ref.read(tokenServiceProvider);
+    await tokenService.deleteToken();
     final token = await tokenService.getToken();
 
     if (token == null || token.isEmpty) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => LoginScreen()),
-      );
+      Navigator.pushReplacementNamed(context, '/login');
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => HomeScreen()),
-      );
+      Navigator.pushReplacementNamed(context, '/home', arguments: 0);
     }
   }
 

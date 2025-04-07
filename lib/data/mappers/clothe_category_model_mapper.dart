@@ -1,8 +1,8 @@
 import 'package:yconic/data/mappers/clothe_model_mapper.dart';
-import 'package:yconic/data/models/clotheCategory_model.dart';
-import 'package:yconic/domain/entities/clotheCategory.dart';
+import 'package:yconic/data/models/clothe_category_model.dart';
+import 'package:yconic/domain/entities/clothe_category.dart';
 
-extension ClothecategoryModelMapper on ClotheCategoryModel {
+extension ClotheCategoryModelMapper on ClotheCategoryModel {
   ClotheCategory toEntity() {
     return ClotheCategory(
         Id: id,

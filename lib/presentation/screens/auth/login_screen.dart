@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
+import 'package:yconic/presentation/providers/user/all_providers.dart';
 
 class LoginScreen extends ConsumerWidget {
   LoginScreen({super.key});
@@ -61,6 +62,9 @@ class LoginScreen extends ConsumerWidget {
                         );
                         final updated = ref.read(authNotifierProvider);
                         if (updated.user != null) {
+                          await ref
+                              .read(allUsersProvider.notifier)
+                              .fetchAllUsers();
                           Navigator.pushReplacementNamed(context, '/home');
                         }
                       },

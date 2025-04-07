@@ -1,8 +1,14 @@
 import 'dart:convert';
 
 import 'package:yconic/core/services/token_service.dart';
+import 'package:yconic/data/mappers/public_user_profile_model_mapper.dart';
+import 'package:yconic/data/mappers/simple_user_model_mapper.dart';
 import 'package:yconic/data/mappers/user_model_mapper.dart';
+import 'package:yconic/data/models/public_user_profile_model.dart';
+import 'package:yconic/data/models/simple_user_model.dart';
 import 'package:yconic/data/models/user_model.dart';
+import 'package:yconic/domain/entities/public_user_profile.dart';
+import 'package:yconic/domain/entities/simple_user.dart';
 import 'package:yconic/domain/entities/user.dart';
 import 'package:yconic/domain/repositories/user_repository.dart';
 import 'package:http/http.dart' as http;
@@ -72,6 +78,123 @@ class UserRepositoryImpl implements UserRepository {
       return userModel.toEntity();
     } else {
       throw Exception('There is no user with that Id: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<PublicUserProfile> getPublicUserProfile(String userId) async {
+    final response = await client.get(
+      Uri.parse('$baseUrl/User/$userId/public-profile'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await tokenService.getToken()}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body)['data'];
+      return PublicUserProfileModel.fromJson(data).toEntity();
+    } else {
+      throw Exception('Kullanıcı profili alınamadı');
+    }
+  }
+
+  @override
+  Future<List<SimpleUser>> getAllUsers() async {
+    final response = await client.get(
+      Uri.parse('$baseUrl/User/simple'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await tokenService.getToken()}',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body)['data'];
+      return data
+          .map((json) => SimpleUserModel.fromJson(json).toEntity())
+          .toList();
+    } else {
+      throw Exception('Failed to fetch users');
+    }
+  }
+
+  @override
+  Future<void> sendFollowRequest(
+      String requesterId, String targetUserId) async {
+    final response = await client.post(
+      Uri.parse(
+          '$baseUrl/FollowRequest/$requesterId/sendRequest/$targetUserId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await tokenService.getToken()}',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Send follow request failed');
+    }
+  }
+
+  @override
+  Future<void> acceptFollowRequest(
+      String targetUserId, String requesterId) async {
+    final response = await client.post(
+      Uri.parse('$baseUrl/FollowRequest/$targetUserId/approve/$requesterId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await tokenService.getToken()}',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Accept follow request failed');
+    }
+  }
+
+  @override
+  Future<void> declineFollowRequest(
+      String targetUserId, String requesterId) async {
+    final response = await client.post(
+      Uri.parse('$baseUrl/FollowRequest/$targetUserId/reject/$requesterId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await tokenService.getToken()}',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Decline follow request failed');
+    }
+  }
+
+  @override
+  Future<void> followUser(String followerId, String followedId) async {
+    final response = await client.post(
+      Uri.parse('$baseUrl/Follow/$followerId/follow/$followedId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await tokenService.getToken()}',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Follow request failed: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<void> unfollowUser(String followerId, String followedId) async {
+    final response = await client.delete(
+      Uri.parse('$baseUrl/Follow/$followerId/unfollow/$followedId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await tokenService.getToken()}',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Unfollow request failed: ${response.statusCode}');
     }
   }
 }

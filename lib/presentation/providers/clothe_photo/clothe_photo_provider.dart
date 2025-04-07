@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:yconic/domain/entities/clothePhoto.dart';
+import 'package:yconic/domain/entities/clothe_photo.dart';
 import 'package:yconic/presentation/providers/app_providers.dart';
 import 'package:yconic/presentation/providers/clothe_photo/clothe_photo_notifier.dart';
 import 'package:yconic/presentation/providers/clothe_photo/clothe_photo_state.dart';

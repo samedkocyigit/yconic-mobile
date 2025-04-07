@@ -1,4 +1,4 @@
-import 'package:yconic/data/models/clotheCategory_model.dart';
+import 'package:yconic/data/models/clothe_category_model.dart';
 
 class GarderobeModel {
   final String id;

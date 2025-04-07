@@ -1,4 +1,4 @@
-import 'package:yconic/data/mappers/clotheCategory_model_mapper.dart';
+import 'package:yconic/data/mappers/clothe_category_model_mapper.dart';
 import 'package:yconic/data/models/garderobe_model.dart';
 import 'package:yconic/domain/entities/garderobe.dart';
 

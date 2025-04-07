@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yconic/core/theme/app_colors.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
 import 'package:yconic/domain/entities/clothe.dart';
-import 'package:yconic/domain/entities/clotheCategory.dart';
+import 'package:yconic/domain/entities/clothe_category.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/providers/clothe/clothe_provider.dart';
 import 'package:yconic/presentation/providers/clothe_category/clothe_category_provider.dart';
@@ -227,6 +227,7 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
                             builder: (_) => ClotheDetailScreen(clothe: clothe),
                           ),
                         );
+
                         if (result is Map && result['deleted'] == true) {
                           final userId = ref.read(userProvider)?.Id;
                           if (userId != null) {
@@ -245,6 +246,27 @@ class _GarderobeScreenState extends ConsumerState<GarderobeScreen> {
                           if (categoryIndex != -1) {
                             setState(
                                 () => selectedCategoryIndex = categoryIndex);
+                          }
+                        }
+
+                        if (result is Map && result['updatedClothe'] != null) {
+                          final updatedClothe =
+                              result['updatedClothe'] as Clothe;
+
+                          final garderobe =
+                              ref.read(userProvider)?.UserGarderobe;
+                          final category = garderobe?.ClothesCategories
+                              .firstWhere(
+                                  (c) => c.Id == updatedClothe.CategoryId);
+
+                          if (category != null) {
+                            final index = category.Clothes.indexWhere(
+                                (c) => c.Id == updatedClothe.Id);
+                            if (index != -1) {
+                              category.Clothes[index] = updatedClothe;
+                              ref.read(userProvider.notifier).state =
+                                  ref.read(authNotifierProvider).user;
+                            }
                           }
                         }
                       },
