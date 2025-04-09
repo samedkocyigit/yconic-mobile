@@ -3,7 +3,7 @@ import 'package:yconic/presentation/screens/auth/login_screen.dart';
 import 'package:yconic/presentation/screens/auth/register_screen.dart';
 import 'package:yconic/presentation/screens/home/explore/user_profile_screen.dart';
 import 'package:yconic/presentation/screens/home/home_screen.dart';
-import 'package:yconic/presentation/screens/home/profile/followers_following_tab_screen.dart';
+import 'package:yconic/presentation/screens/home/profile/follow_tab/followers_following_tab_screen.dart';
 import 'package:yconic/presentation/screens/splash_screen.dart';
 
 class AppRouter {
