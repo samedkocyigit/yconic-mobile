@@ -1,6 +1,11 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:yconic/core/services/token_service.dart';
+import 'package:yconic/data/dtos/user/change_password_dto.dart';
+import 'package:yconic/data/dtos/user/change_profile_photo_dto.dart';
+import 'package:yconic/data/dtos/user/update_user_account_dto.dart';
+import 'package:yconic/data/dtos/user/update_user_personal_dto.dart';
 import 'package:yconic/data/mappers/public_user_profile_model_mapper.dart';
 import 'package:yconic/data/mappers/simple_user_model_mapper.dart';
 import 'package:yconic/data/mappers/user_model_mapper.dart';
@@ -78,6 +83,95 @@ class UserRepositoryImpl implements UserRepository {
       return userModel.toEntity();
     } else {
       throw Exception('There is no user with that Id: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<User> updateUserAccount(String id, UpdateUserAccountDto dto) async {
+    final response = await client.patch(
+        Uri.parse('$baseUrl/User/account-info/$id'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(dto.toJson()));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      final userJson = data['data'];
+      final userModel = UserModel.fromJson(userJson);
+      return userModel.toEntity();
+    } else {
+      throw Exception('Updation failed');
+    }
+  }
+
+  @override
+  Future<User> updateUserPersonal(String id, UpdateUserPersonalDto dto) async {
+    final response = await client.patch(
+        Uri.parse('$baseUrl/User/personal-info/$id'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(dto.toJson()));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      final userJson = data['data'];
+      final userModel = UserModel.fromJson(userJson);
+      return userModel.toEntity();
+    } else {
+      throw Exception('Updation failed');
+    }
+  }
+
+  @override
+  Future<void> changePassword(String id, ChangePasswordDto dto) async {
+    final response = await client.patch(
+        Uri.parse('$baseUrl/User/change-password/$id'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(dto.toJson()));
+
+    if (response.statusCode == 200) {
+    } else {
+      throw Exception('Password change process failed');
+    }
+  }
+
+  @override
+  Future<User> changePrivacy(String id) async {
+    final response = await client.patch(
+      Uri.parse('$baseUrl/User/change-privacy/$id'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(response.body);
+      final userJson = data['data'];
+      final userModel = UserModel.fromJson(userJson);
+      return userModel.toEntity();
+    } else {
+      throw Exception('Privacy change process failed');
+    }
+  }
+
+  @override
+  Future<User> changeProfilePhoto(String url, ChangeProfilePhotoDto dto) async {
+    var uri = Uri.parse(url);
+    var request = http.MultipartRequest('POST', uri);
+
+    var multipartFile = await http.MultipartFile.fromPath(
+      'photo',
+      dto.photo.path,
+    );
+    request.files.add(multipartFile);
+
+    http.StreamedResponse streamedResponse = await request.send();
+
+    final responseString = await streamedResponse.stream.bytesToString();
+
+    if (streamedResponse.statusCode == 200) {
+      final Map<String, dynamic> data = jsonDecode(responseString);
+      final userJson = data['data'];
+      final userModel = UserModel.fromJson(userJson);
+      return userModel.toEntity();
+    } else {
+      throw Exception('Photo add process failed');
     }
   }
 
@@ -169,6 +263,22 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<void> cancelFollowRequest(
+      String requesterId, String targetUserId) async {
+    final response = await client.delete(
+      Uri.parse('$baseUrl/FollowRequest/$requesterId/cancel/$targetUserId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await tokenService.getToken()}',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Decline follow request failed');
+    }
+  }
+
+  @override
   Future<void> followUser(String followerId, String followedId) async {
     final response = await client.post(
       Uri.parse('$baseUrl/Follow/$followerId/follow/$followedId'),
@@ -185,6 +295,21 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<void> unfollowUser(String followerId, String followedId) async {
+    final response = await client.delete(
+      Uri.parse('$baseUrl/Follow/$followerId/unfollow/$followedId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ${await tokenService.getToken()}',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Unfollow request failed: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<void> removeFollower(String followerId, String followedId) async {
     final response = await client.delete(
       Uri.parse('$baseUrl/Follow/$followerId/unfollow/$followedId'),
       headers: {
