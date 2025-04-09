@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:yconic/domain/entities/public_user_profile.dart';
 import 'package:yconic/presentation/providers/app_providers.dart';
 
-final publicUserProfileProvider = StateNotifierProvider.family.autoDispose<
+final publicUserProfileProvider = StateNotifierProvider.family<
     PublicUserProfileNotifier,
     AsyncValue<PublicUserProfile>,
     String>((ref, userId) {
@@ -18,7 +18,7 @@ class PublicUserProfileNotifier
   final String userId;
 
   PublicUserProfileNotifier(this.ref, this.userId)
-      : super(const AsyncLoading()) {}
+      : super(const AsyncLoading());
 
   Future<void> load() async {
     try {

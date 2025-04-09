@@ -1,8 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:yconic/data/dtos/user/change_password_dto.dart';
+import 'package:yconic/data/dtos/user/change_profile_photo_dto.dart';
+import 'package:yconic/data/dtos/user/update_user_account_dto.dart';
+import 'package:yconic/data/dtos/user/update_user_personal_dto.dart';
 import 'package:yconic/domain/entities/simple_user.dart';
 import 'package:yconic/domain/usecases/userUsecases/get_user_by_id_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/login_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/register_usecase.dart';
+import 'package:yconic/presentation/providers/app_providers.dart';
 import 'package:yconic/presentation/providers/auth/auth_state.dart';
 import 'package:yconic/presentation/providers/token_provider.dart';
 
@@ -58,6 +63,87 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } catch (e) {
       print("🔥 getUser error: $e");
       state = state.copyWith(isLoading: false, error: e.toString());
+    }
+  }
+}
+
+extension ExtendedAuthNotifier on AuthNotifier {
+  Future<void> updateUserPersonal(UpdateUserPersonalDto dto) async {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    state = state.copyWith(isLoading: true);
+    try {
+      final updated = await ref
+          .read(updateUserPersonalUsecaseProvider)
+          .execute(currentUser.Id, dto);
+      state = state.copyWith(isLoading: false, user: updated);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> changePrivacy() async {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    state = state.copyWith(isLoading: true);
+    try {
+      final updated =
+          await ref.read(changePrivacyUsecaseProvider).execute(currentUser.Id);
+      state = state.copyWith(isLoading: false, user: updated);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> updateUserAccount(UpdateUserAccountDto dto) async {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    state = state.copyWith(isLoading: true);
+    try {
+      final updated = await ref
+          .read(updateUserAccountUsecaseProvider)
+          .execute(currentUser.Id, dto);
+      state = state.copyWith(isLoading: false, user: updated);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> changeProfilePhoto(ChangeProfilePhotoDto dto) async {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    state = state.copyWith(isLoading: true);
+    try {
+      final updated = await ref
+          .read(changeProfilePhotoUsecaseProvider)
+          .execute(currentUser.Id, dto);
+      state = state.copyWith(isLoading: false, user: updated);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
+    }
+  }
+
+  Future<void> changePassword(ChangePasswordDto dto) async {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    state = state.copyWith(isLoading: true);
+    try {
+      await ref
+          .read(changePasswordUsecaseProvider)
+          .execute(currentUser.Id, dto);
+      state = state.copyWith(isLoading: false);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      rethrow;
     }
   }
 }
