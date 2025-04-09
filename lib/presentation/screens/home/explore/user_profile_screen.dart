@@ -5,7 +5,7 @@ import 'package:yconic/core/theme/app_text_styles.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
 import 'package:yconic/presentation/providers/follow/follow_provider.dart';
 import 'package:yconic/presentation/providers/user/public_user_profile_provider.dart';
-import 'package:yconic/presentation/screens/home/profile/followers_following_tab_screen.dart';
+import 'package:yconic/presentation/screens/home/profile/follow_tab/followers_following_tab_screen.dart';
 
 class UserProfileScreen extends ConsumerWidget {
   final String userId;
@@ -41,7 +41,8 @@ class UserProfileScreen extends ConsumerWidget {
                       CircleAvatar(
                         radius: 40.r,
                         backgroundImage: targetUser.profilePhoto != null
-                            ? NetworkImage(targetUser.profilePhoto!)
+                            ? NetworkImage(
+                                'http://10.0.2.2:5000${targetUser.profilePhoto}')
                             : const AssetImage("assets/default_avatar.jpg")
                                 as ImageProvider,
                       ),
@@ -86,7 +87,7 @@ class UserProfileScreen extends ConsumerWidget {
                     ],
                   ),
                   SizedBox(height: 12.h),
-                  Text('@${targetUser.username}',
+                  Text('${targetUser.username}',
                       style: AppTextStyles.title
                           .copyWith(fontWeight: FontWeight.bold)),
                   if (targetUser.bio != null && targetUser.bio!.isNotEmpty)
@@ -99,27 +100,30 @@ class UserProfileScreen extends ConsumerWidget {
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: isRequested
-                            ? null
-                            : () async {
-                                final followNotifier =
-                                    ref.read(followNotifierProvider.notifier);
+                        onPressed: () async {
+                          final followNotifier =
+                              ref.read(followNotifierProvider.notifier);
 
-                                try {
-                                  if (isFollowing) {
-                                    await followNotifier.unfollowUser(
-                                        currentUser.Id, targetUser.id);
-                                  } else if (isPrivate) {
-                                    await followNotifier.sendFollowRequest(
-                                        currentUser.Id, targetUser.id);
-                                  } else {
-                                    await followNotifier.followUser(
-                                        currentUser.Id, targetUser.id);
-                                  }
-                                } catch (e) {
-                                  debugPrint('Follow error: $e');
-                                }
-                              },
+                          try {
+                            if (isFollowing) {
+                              await followNotifier.unfollowUser(
+                                  currentUser.Id, targetUser.id);
+                            } else if (isRequested) {
+                              await followNotifier.cancelFollowRequest(
+                                  currentUser.Id, targetUser.id);
+                            } else {
+                              if (isPrivate) {
+                                await followNotifier.sendFollowRequest(
+                                    currentUser.Id, targetUser.id);
+                              } else {
+                                await followNotifier.followUser(
+                                    currentUser.Id, targetUser.id);
+                              }
+                            }
+                          } catch (e) {
+                            debugPrint('Follow error: $e');
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isFollowing || isRequested
                               ? Colors.white
