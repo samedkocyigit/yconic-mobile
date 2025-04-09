@@ -23,6 +23,10 @@ import 'package:yconic/domain/usecases/garderobeUsecases/delete_garderobe_with_i
 import 'package:yconic/domain/usecases/garderobeUsecases/get_garderobe_by_id_usecase.dart';
 import 'package:yconic/domain/usecases/garderobeUsecases/update_garderobe_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/accept_follow_request_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/cancel_follow_request_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/change_password_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/change_privacy_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/change_profile_photo_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/decline_follow_request_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/follow_user_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/get_all_users_usecase.dart';
@@ -30,8 +34,11 @@ import 'package:yconic/domain/usecases/userUsecases/get_public_user_profile_usec
 import 'package:yconic/domain/usecases/userUsecases/get_user_by_id_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/login_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/register_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/remove_follower_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/send_follow_request_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/unfollow_user_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/update_user_account_usecase.dart';
+import 'package:yconic/domain/usecases/userUsecases/update_user_personal_usecase.dart';
 import 'package:yconic/presentation/providers/token_provider.dart';
 
 const String baseUrl = 'http://10.0.2.2:5000/api';
@@ -71,6 +78,34 @@ final getAllUsersUsecaseProvider = Provider<GetAllUsersUsecase>((ref) {
   return GetAllUsersUsecase(repository);
 });
 
+final changePrivacyUsecaseProvider = Provider<ChangePrivacyUsecase>((ref) {
+  final repository = ref.watch(userRepositoryProvider);
+  return ChangePrivacyUsecase(repository);
+});
+
+final changePasswordUsecaseProvider = Provider<ChangePasswordUsecase>((ref) {
+  final repository = ref.watch(userRepositoryProvider);
+  return ChangePasswordUsecase(repository);
+});
+
+final changeProfilePhotoUsecaseProvider =
+    Provider<ChangeProfilePhotoUsecase>((ref) {
+  final repository = ref.watch(userRepositoryProvider);
+  return ChangeProfilePhotoUsecase(repository);
+});
+
+final updateUserAccountUsecaseProvider =
+    Provider<UpdateUserAccountUsecase>((ref) {
+  final repository = ref.watch(userRepositoryProvider);
+  return UpdateUserAccountUsecase(repository);
+});
+
+final updateUserPersonalUsecaseProvider =
+    Provider<UpdateUserPersonalUsecase>((ref) {
+  final repository = ref.watch(userRepositoryProvider);
+  return UpdateUserPersonalUsecase(repository);
+});
+
 /* -------------------------------------
               Follow
 ----------------------------------------*/
@@ -89,6 +124,11 @@ final declineFollowRequestUsecaseProvider = Provider((ref) {
   return DeclineFollowRequestUsecase(repo);
 });
 
+final cancelFollowRequestUsecaseProvider = Provider((ref) {
+  final repo = ref.watch(userRepositoryProvider);
+  return CancelFollowRequestUsecase(repo);
+});
+
 final followUserUsecaseProvider = Provider((ref) {
   final repo = ref.watch(userRepositoryProvider);
   return FollowUserUsecase(repo);
@@ -97,6 +137,11 @@ final followUserUsecaseProvider = Provider((ref) {
 final unfollowUserUsecaseProvider = Provider((ref) {
   final repo = ref.watch(userRepositoryProvider);
   return UnfollowUserUsecase(repo);
+});
+
+final removeFollowerUsecaseProvider = Provider((ref) {
+  final repo = ref.watch(userRepositoryProvider);
+  return RemoveFollowerUsecase(repo);
 });
 /*--------------------------------------
                Clothe Category
