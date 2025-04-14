@@ -5,7 +5,7 @@ class SuggestionModel {
   final String userId;
   final String? description;
   final String? image;
-  final String createdAt;
+  // final String createdAt;
   final List<ClotheModel> suggestedLook;
 
   SuggestionModel({
@@ -13,7 +13,7 @@ class SuggestionModel {
     required this.userId,
     this.description,
     this.image,
-    required this.createdAt,
+    // required this.createdAt,
     required this.suggestedLook,
   });
 
@@ -23,7 +23,7 @@ class SuggestionModel {
       userId: json['userId'] as String,
       description: json['description'] as String?,
       image: json['image'] as String?,
-      createdAt: json['createdAt'] as String,
+      // createdAt: json['createdAt'] as String,
       suggestedLook: (json['suggestedLook'] as List)
           .map((e) => ClotheModel.fromJson(e as Map<String, dynamic>))
           .toList(),

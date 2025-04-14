@@ -7,7 +7,8 @@ extension SuggestionModelMapper on SuggestionModel {
     return Suggestion(
       Id: id,
       UserId: userId,
-      CreatedAt: DateTime.parse(createdAt),
+      Description: description,
+      // CreatedAt: DateTime.parse(createdAt),
       SuggestedLook: suggestedLook.map((s) => s.toEntity()).toList(),
     );
   }

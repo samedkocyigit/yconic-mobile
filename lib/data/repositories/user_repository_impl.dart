@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:yconic/core/services/token_service.dart';
 import 'package:yconic/data/dtos/user/change_password_dto.dart';
 import 'package:yconic/data/dtos/user/change_profile_photo_dto.dart';
