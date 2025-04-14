@@ -3,11 +3,13 @@ import 'package:yconic/data/repositories/clothe_category_repository_impl.dart';
 import 'package:yconic/data/repositories/clothe_photo_repository_impl.dart';
 import 'package:yconic/data/repositories/clothe_repository_impl.dart';
 import 'package:yconic/data/repositories/garderobe_repository_impl.dart';
+import 'package:yconic/data/repositories/suggestion_repository_impl.dart';
 import 'package:yconic/data/repositories/user_repository_impl.dart';
 import 'package:yconic/domain/repositories/clothe_category_repository.dart';
 import 'package:yconic/domain/repositories/clothe_photo_repository.dart';
 import 'package:yconic/domain/repositories/clothe_repository.dart';
 import 'package:yconic/domain/repositories/garderobe_repository.dart';
+import 'package:yconic/domain/repositories/suggestion_repository.dart';
 import 'package:yconic/domain/repositories/user_repository.dart';
 import 'package:yconic/domain/usecases/clotheCategoryUsecases/create_clothe_category_usecase.dart';
 import 'package:yconic/domain/usecases/clotheCategoryUsecases/delete_clothe_category_with_id_usecase.dart';
@@ -22,6 +24,7 @@ import 'package:yconic/domain/usecases/clotheUsecases/update_clothe_usecase.dart
 import 'package:yconic/domain/usecases/garderobeUsecases/delete_garderobe_with_id_usecase.dart';
 import 'package:yconic/domain/usecases/garderobeUsecases/get_garderobe_by_id_usecase.dart';
 import 'package:yconic/domain/usecases/garderobeUsecases/update_garderobe_usecase.dart';
+import 'package:yconic/domain/usecases/suggestionUsecases/create_suggestion_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/accept_follow_request_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/cancel_follow_request_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/change_password_usecase.dart';
@@ -248,4 +251,18 @@ final deleteClothePhotoWithIdUseCaseProvider =
     Provider<DeleteClothePhotoWithIdUsecase>((ref) {
   final repository = ref.watch(clothePhotoRepositoryProvider);
   return DeleteClothePhotoWithIdUsecase(repository);
+});
+
+/*---------------------------------------
+            Suggestions
+----------------------------------------*/
+
+final suggestionRepositoryProvider = Provider<SuggestionRepository>((ref) {
+  return SuggestionRepositoryImpl(baseUrl: baseUrl);
+});
+
+final createSuggestionUsecaseProvider =
+    Provider<CreateSuggestionUsecase>((ref) {
+  final repo = ref.watch(suggestionRepositoryProvider);
+  return CreateSuggestionUsecase(repo);
 });
