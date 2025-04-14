@@ -5,7 +5,7 @@ class Suggestion {
   final String UserId;
   final String? Description;
   final String? Image;
-  final DateTime? CreatedAt;
+  // final DateTime? CreatedAt;
   final List<Clothe> SuggestedLook;
 
   Suggestion(
@@ -13,6 +13,6 @@ class Suggestion {
       required this.UserId,
       this.Description,
       this.Image,
-      required this.CreatedAt,
+      // required this.CreatedAt,
       required this.SuggestedLook});
 }
