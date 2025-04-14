@@ -4,6 +4,7 @@ import 'package:yconic/data/dtos/user/change_profile_photo_dto.dart';
 import 'package:yconic/data/dtos/user/update_user_account_dto.dart';
 import 'package:yconic/data/dtos/user/update_user_personal_dto.dart';
 import 'package:yconic/domain/entities/simple_user.dart';
+import 'package:yconic/domain/entities/suggestion.dart';
 import 'package:yconic/domain/usecases/userUsecases/get_user_by_id_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/login_usecase.dart';
 import 'package:yconic/domain/usecases/userUsecases/register_usecase.dart';
@@ -146,9 +147,31 @@ extension ExtendedAuthNotifier on AuthNotifier {
       rethrow;
     }
   }
+
+  Future<void> refreshUser() async {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    try {
+      final updated = await getUserByIdUsecase.execute(currentUser.Id);
+      state = state.copyWith(user: updated);
+    } catch (e) {
+      print('❌ Failed to refresh user: $e');
+    }
+  }
 }
 
 extension AuthNotifierExtensions on AuthNotifier {
+  void addSuggestion(Suggestion newSuggestion) {
+    final currentUser = state.user;
+    if (currentUser == null) return;
+
+    final updatedSuggestions = [...?currentUser.Suggestions, newSuggestion];
+
+    final updatedUser = currentUser.copyWith(Suggestions: updatedSuggestions);
+    state = state.copyWith(user: updatedUser);
+  }
+
   void addFollowing(SimpleUser userToAdd) {
     final currentUser = state.user;
     if (currentUser == null) return;
