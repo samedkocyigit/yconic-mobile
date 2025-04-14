@@ -30,6 +30,18 @@ class UserProfileScreen extends ConsumerWidget {
 
         return Scaffold(
           backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title: Text(
+              targetUser.username,
+              style: AppTextStyles.title.copyWith(color: Colors.black),
+            ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
           body: SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
