@@ -33,8 +33,10 @@ class SuggestionRepositoryImpl implements SuggestionRepository {
 
   @override
   Future<Suggestion> createSuggestion(String userId) async {
-    final response = await client.post(Uri.parse('$baseUrl/suggestion/$userId'),
-        headers: {'Content-Type': 'application/json'});
+    final response = await client.post(
+      Uri.parse('$baseUrl/Suggestion/$userId'),
+      headers: {'Content-Type': 'application/json'},
+    );
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = jsonDecode(response.body);
