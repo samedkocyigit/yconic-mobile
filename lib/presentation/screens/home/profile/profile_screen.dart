@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:yconic/core/theme/app_text_styles.dart';
 import 'package:yconic/presentation/providers/auth/auth_provider.dart';
-import 'package:yconic/presentation/screens/auth/login_screen.dart';
+import 'package:yconic/presentation/screens/home/profile/change_profile_photo/change_profile_photo_popup.dart';
 import 'package:yconic/presentation/screens/home/profile/edit_profile/edit_profile_screen.dart';
 import 'package:yconic/presentation/screens/home/profile/account_option/account_options_screen.dart';
 import 'package:yconic/presentation/screens/home/profile/follow_tab/followers_following_tab_screen.dart';
@@ -25,13 +25,11 @@ class ProfileScreen extends ConsumerWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        centerTitle: true,
         title: Text(
           user.Username,
           style: AppTextStyles.title.copyWith(color: Colors.black),
         ),
         actions: [
-          // Menu icon navigates to AccountOptionsScreen.
           IconButton(
             icon: Icon(Icons.menu, size: 24.sp, color: Colors.black),
             onPressed: () {
@@ -68,16 +66,8 @@ class ProfileScreen extends ConsumerWidget {
                         bottom: 0,
                         right: 0,
                         child: InkWell(
-                          onTap: () async {
-                            // Here you implement your image picker integration.
-                            // For example:
-                            // final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-                            // if (pickedFile != null) {
-                            //    final dto = ChangeProfilePhotoDto(photo: pickedFile);
-                            //    await ref.read(authNotifierProvider.notifier).changeProfilePhoto(dto);
-                            // }
-                            print("Pencil icon tapped - change profile photo");
-                          },
+                          onTap: () =>
+                              showChangeProfilePhotoPopup(context, ref),
                           child: CircleAvatar(
                             backgroundColor: Colors.white,
                             radius: 12.r,
